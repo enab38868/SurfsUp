@@ -2,7 +2,7 @@
 
 namespace SurfsUpProjekt.Models;
 
-public class Boards
+public class Board
 {
     public int Id { get; set; }
     public string Name { get; set; }
