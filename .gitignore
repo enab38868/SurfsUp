@@ -348,5 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/SurfsUpProjekt/Migrations/20220826074039_InitialCreateSurfsUp.Designer.cs
-/SurfsUpProjekt/Migrations/20220826074039_InitialCreateSurfsUp.cs
+/SurfsUpProjekt/Migrations/20220826073638_InitialCreateSurfsUp.cs
+/SurfsUpProjekt/Migrations/20220826073638_InitialCreateSurfsUp.Designer.cs
