@@ -46,8 +46,17 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards/Create
+        [Route("Create")] //IDK
+        [HttpPost]
         public IActionResult Create()
         {
+            HttpPostedFileBase file = Request.Files["ImageData"];
+            ContentRepository service = new ContentRepository();
+            int i = service.UploadImageInDataBase(file, model);
+            if (i == 1)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
