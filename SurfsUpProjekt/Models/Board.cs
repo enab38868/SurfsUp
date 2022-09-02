@@ -45,4 +45,5 @@ public class Board
     public double Price { get; set; }
     public string? Equipment { get; set; }
 
+    public string? Image { get; set; }
 }
