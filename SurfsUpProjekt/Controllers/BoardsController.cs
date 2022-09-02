@@ -20,12 +20,54 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+        string sortOrder,
+        string currentFilter,
+        string searchString,
+        int? pageNumber)
         {
-              return _context.Board != null ? 
-                          View(await _context.Board.ToListAsync()) :
-                          Problem("Entity set 'SurfsUpProjektContext.Board'  is null.");
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var boards = from s in _context.Board
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                boards = boards.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    boards = boards.OrderByDescending(s => s.Name);
+                    break;
+                case "Price":
+                    boards = boards.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    boards = boards.OrderByDescending(s => s.Price);
+                    break;
+                default:
+                    boards = boards.OrderBy(s => s.Name);
+                    break;
+            }
+            int pageSize = 4;
+            return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
 
         // GET: Boards/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -56,7 +98,7 @@ namespace SurfsUpProjekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment")] Board board)
+        public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +130,7 @@ namespace SurfsUpProjekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment")] Board board)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
         {
             if (id != board.Id)
             {
