@@ -1,14 +1,18 @@
-﻿using LazZiya.TagHelpers;
+using LazZiya.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SurfsUpProjekt.Data;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SurfsUpProjektContext") ?? throw new InvalidOperationException("Connection string 'SurfsUpProjektContext' not found.")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<SurfsUpProjektContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -40,11 +44,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Boards}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();
