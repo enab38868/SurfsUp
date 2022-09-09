@@ -5,62 +5,69 @@
 }
 
 <h1>Details</h1>
+<h4>Board</h4>
+<hr />
 
-<div>
-    <h4>Board</h4>
-    <hr />
+<div style="width:50%; float:left;">
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Length)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Length)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Width)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Width)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Thickness)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Thickness)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Volume)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Volume)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Type)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Type)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Price)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Equipment)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Equipment)
+            <br>
         </dd>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        <a asp-action="Index">Back to List</a>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div style="width=50%;">
+    <dl>
+        <dt class="col-sm-11">
+            <img src="@Model.Image" alt="" height=300 width=300>
+        </dt>
+    </dl>
+
 </div>
