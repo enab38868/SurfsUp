@@ -6,6 +6,8 @@ using SurfsUpProjekt.Data;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using SurfsUpProjekt.Models;
+using MvcMovie.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
@@ -26,6 +28,16 @@ CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
+
+
+
 //app.UseRequestLocalization(new RequestLocalizationOptions
 //{
 //    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(cultureInfo), 
