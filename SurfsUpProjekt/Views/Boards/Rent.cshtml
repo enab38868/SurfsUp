@@ -1,0 +1,74 @@
+﻿@model SurfsUpProjekt.Models.Board
+
+@{
+    ViewData["Title"] = "Rent";
+}
+
+<h1>Rent</h1>
+
+<div>
+    <h4>Board</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Length)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Length)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Width)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Width)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Thickness)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Thickness)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Volume)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Volume)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Equipment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Equipment)
+        </dd>
+        
+    </dl>
+    <img src="@Model.Image" alt="" height=100 width=100>
+</div>
+<div>
+
+    <form asp-action="Rent">
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Rent Board" class="btn btn-primary" />
+        <a asp-action="UserIndex">Back to list</a>
+    </form>
+
+</div>
+

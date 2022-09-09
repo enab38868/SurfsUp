@@ -68,9 +68,72 @@ namespace SurfsUpProjekt.Controllers
             return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
+        public async Task<IActionResult> UserIndex(
+        string sortOrder,
+        string currentFilter,
+        string searchString,
+        int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var boards = from s in _context.Board
+                         select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                boards = boards.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    boards = boards.OrderByDescending(s => s.Name);
+                    break;
+                case "Price":
+                    boards = boards.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    boards = boards.OrderByDescending(s => s.Price);
+                    break;
+                default:
+                    boards = boards.OrderBy(s => s.Name);
+                    break;
+            }
+            int pageSize = 4;
+            return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
 
         // GET: Boards/Details/5
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Board == null)
+            {
+                return NotFound();
+            }
+
+            var board = await _context.Board
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (board == null)
+            {
+                return NotFound();
+            }
+
+            return View(board);
+        }
+        public async Task<IActionResult> Rent(int? id)
         {
             if (id == null || _context.Board == null)
             {
@@ -200,6 +263,17 @@ namespace SurfsUpProjekt.Controllers
         private bool BoardExists(int id)
         {
           return (_context.Board?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpPost, ActionName("Rent")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RentConfirmed(int id)
+        {
+
+
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(UserIndex));
         }
     }
 }
