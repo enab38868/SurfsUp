@@ -8,12 +8,15 @@ using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using SurfsUpProjekt.Models;
 using MvcMovie.Models;
+using SurfsUpProjekt.Core;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SurfsUpProjektContext") ?? throw new InvalidOperationException("Connection string 'SurfsUpProjektContext' not found.")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>() // Authorization??
     .AddEntityFrameworkStores<SurfsUpProjektContext>();
 
 // Add services to the container.
@@ -27,6 +30,9 @@ cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
+
+AddAuthorizationPolicies(); //AUTHORIZATION
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
@@ -34,16 +40,9 @@ using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
     var services = scope.ServiceProvider;
 
     SeedData.Initialize(services);
+    await SeedData.InitializeRoles(services);
 }
 
-
-
-//app.UseRequestLocalization(new RequestLocalizationOptions
-//{
-//    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(cultureInfo), 
-//    SupportedCultures = new List<CultureInfo> { cultureInfo},
-//    SupportedUICultures = new List<CultureInfo> { cultureInfo }
-//});
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -66,4 +65,16 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+
+
 app.Run();
+
+void AddAuthorizationPolicies()
+{
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy(ConstantsRole.Policies.RequireAdmin, policy => policy.RequireRole(ConstantsRole.Roles.Administrator));
+        options.AddPolicy(ConstantsRole.Policies.RequireManager, policy => policy.RequireRole(ConstantsRole.Roles.Manager));
+
+    });
+}

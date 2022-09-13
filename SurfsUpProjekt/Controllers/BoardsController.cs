@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SurfsUpProjekt.Core;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
+using static SurfsUpProjekt.Core.ConstantsRole;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -20,6 +23,7 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(
         string sortOrder,
         string currentFilter,
@@ -151,6 +155,7 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -159,6 +164,7 @@ namespace SurfsUpProjekt.Controllers
         // POST: Boards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
@@ -173,6 +179,7 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Board == null)
@@ -191,6 +198,7 @@ namespace SurfsUpProjekt.Controllers
         // POST: Boards/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
@@ -224,6 +232,7 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // GET: Boards/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Board == null)
@@ -242,6 +251,7 @@ namespace SurfsUpProjekt.Controllers
         }
 
         // POST: Boards/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -269,9 +279,6 @@ namespace SurfsUpProjekt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RentConfirmed(int id)
         {
-
-
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(UserIndex));
         }
