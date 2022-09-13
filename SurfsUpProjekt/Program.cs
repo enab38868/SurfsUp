@@ -11,6 +11,8 @@ using MvcMovie.Models;
 using SurfsUpProjekt.Core;
 using Microsoft.AspNetCore.Authorization;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SurfsUpProjektContext") ?? throw new InvalidOperationException("Connection string 'SurfsUpProjektContext' not found.")));
@@ -34,6 +36,7 @@ CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 AddAuthorizationPolicies(); //AUTHORIZATION
 
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
 {
@@ -64,8 +67,6 @@ app.MapControllerRoute(
     pattern: "{controller=Boards}/{action=UserIndex}/{id?}");
 
 app.MapRazorPages();
-
-
 
 app.Run();
 
