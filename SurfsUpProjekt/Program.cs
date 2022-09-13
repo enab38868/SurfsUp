@@ -8,6 +8,9 @@ using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using SurfsUpProjekt.Models;
 using MvcMovie.Models;
+using SurfsUpProjekt.Core;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
@@ -27,7 +30,10 @@ cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
+AddAuthorizationPolicies();
+
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
 {
@@ -67,3 +73,13 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+void AddAuthorizationPolicies()
+{
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy(ConstantsRole.Policies.RequireAdmin, policy => policy.RequireRole(ConstantsRole.Roles.Administrator));
+        options.AddPolicy(ConstantsRole.Policies.RequireManager, policy => policy.RequireRole(ConstantsRole.Roles.Manager));
+
+    });
+}
