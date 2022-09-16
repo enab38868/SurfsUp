@@ -46,4 +46,6 @@ public class Board
     public string? Equipment { get; set; }
 
     public string? Image { get; set; }
+
+    public virtual Rent? Rent { get; set; }
 }

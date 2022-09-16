@@ -138,22 +138,6 @@ namespace SurfsUpProjekt.Controllers
 
             return View(board);
         }
-        public async Task<IActionResult> Rent(int? id)
-        {
-            if (id == null || _context.Board == null)
-            {
-                return NotFound();
-            }
-
-            var board = await _context.Board
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (board == null)
-            {
-                return NotFound();
-            }
-
-            return View(board);
-        }
 
         // GET: Boards/Create
         [Authorize(Roles = "Administrator")]

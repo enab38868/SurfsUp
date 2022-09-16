@@ -14,7 +14,8 @@ namespace SurfsUpProjekt.Data
             : base(options)
         {
         }
-
         public DbSet<SurfsUpProjekt.Models.Board> Board { get; set; } = default!;
+
+        public DbSet<SurfsUpProjekt.Models.Rent> Rent { get; set; }
     }
-}
+}   
