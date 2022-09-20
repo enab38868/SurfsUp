@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
+using System.Security.Claims;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -93,14 +95,21 @@ namespace SurfsUpProjekt.Controllers
             var rent = new Rent();
             return View(rent);
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentOut(int id, [Bind(include: "StartRent,EndRent")] Rent rent)
+        public async Task<IActionResult> RentOut(int id, string UserID, [Bind(include: "StartRent,EndRent")] Rent rent)
         {
             if (!BoardExists(id))
             {
                 return NotFound();
             }
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            
+            UserID = claims.Value;
+            rent.UserID = UserID;
 
             rent.BoardId = id;
             if (rent.StartRent > rent.EndRent)
@@ -109,7 +118,7 @@ namespace SurfsUpProjekt.Controllers
             }
             else
             {
-                if (ModelState.IsValid)
+                if (rent.UserID != null && rent.BoardId != 0) //vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
                 {
                     try
                     {
@@ -120,7 +129,7 @@ namespace SurfsUpProjekt.Controllers
                     {
                         throw;
                     }
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(UserIndex));
                 }
             }
             return View(rent);
