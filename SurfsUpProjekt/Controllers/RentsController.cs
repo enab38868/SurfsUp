@@ -15,59 +15,51 @@ namespace SurfsUpProjekt.Controllers
             _context = context;
         }
 
-        // GET: Boards
-        public async Task<IActionResult> Index(string sortOrder,
-                                                string currentFilter,
-                                                string search,
-                                                int? pageNumber,
-                                                string type)
+        // GET: RentsController/UserIndex
+        public async Task<IActionResult> UserIndex(
+                string sortOrder,
+                string currentFilter,
+                string searchString,
+                int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
-            if (search != null)
+            if (searchString != null)
             {
                 pageNumber = 1;
             }
             else
             {
-                search = currentFilter;
+                searchString = currentFilter;
             }
 
-            var boards = from m in _context.Board
-                         select m;
+            ViewData["CurrentFilter"] = searchString;
 
-            boards = boards.Include(r => r.Rent);
+            var boards = from s in _context.Board
+                         select s;
 
-            await boards.Where(board => board.Rent != null && board.Rent.EndRent < DateTime.Now).ForEachAsync(board => board.Rent = null);
+            if (!String.IsNullOrEmpty(searchString))
             {
-                await _context.SaveChangesAsync();
+                boards = boards.Where(s => s.Name.Contains(searchString));
             }
 
-            boards = boards.Where(board => board.Rent == null);
-
-
-            /* Filtering the boards by the search string and then sorting them by the type. */
-            if (!String.IsNullOrEmpty(search))
-                boards = from b in boards where b.Name.ToLower()!.Contains(search.ToLower()) select b;
-
-            if (!String.IsNullOrEmpty(type))
+            switch (sortOrder)
             {
-                //PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(Board)).Find("Length", true);
-                //var test2 = from b in _context.Board.ToList() orderby prop.GetValue(b) select b; //THIS WORKS
-                //ReturnedList = (from b in _context.Board.ToList() orderby prop.GetValue(b) select b).ToList(); ///Works too
-                boards = type.ToLower() switch
-                {
-                    "name" => from b in boards orderby b.Name select b,
-                    "length" => from b in boards orderby b.Length select b,
-                    "thickness" => from b in boards orderby b.Thickness select b,
-                    "volume" => from b in boards orderby b.Volume select b,
-                    "type" => from b in boards orderby b.Type select b,
-                    "price" => from b in boards orderby b.Price select b,
-                    "equipment" => from b in boards orderby b.Equipment select b,
-                    _ => from b in boards orderby b.Name select b,
-                };
+                case "name_desc":
+                    boards = boards.OrderByDescending(s => s.Name);
+                    break;
+                case "Price":
+                    boards = boards.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    boards = boards.OrderByDescending(s => s.Price);
+                    break;
+                default:
+                    boards = boards.OrderBy(s => s.Name);
+                    break;
             }
-
             int pageSize = 4;
             return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
@@ -137,6 +129,13 @@ namespace SurfsUpProjekt.Controllers
         {
             return _context.Board.Any(e => e.Id == id);
         }
+        //[HttpPost, ActionName("Rent")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> RentConfirmed(int id)
+        //{
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(UserIndex));
+        //}
     }
 
 }
