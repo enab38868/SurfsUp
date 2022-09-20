@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurfsUpProjekt.Data;
 
@@ -11,9 +12,10 @@ using SurfsUpProjekt.Data;
 namespace SurfsUpProjekt.Migrations
 {
     [DbContext(typeof(SurfsUpProjektContext))]
-    partial class SurfsUpProjektContextModelSnapshot : ModelSnapshot
+    [Migration("20220920093017_ConnectUserIDToRentClass")]
+    partial class ConnectUserIDToRentClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -14,6 +14,7 @@ namespace SurfsUpProjekt.Models
         public DateTime EndRent { get; set; } = DateTime.Now.AddDays(7);
         //public virtual Board Board { get; set; }
 
-
+        [ForeignKey("User")]
+        public string UserID { get; set; }
     }
 }
