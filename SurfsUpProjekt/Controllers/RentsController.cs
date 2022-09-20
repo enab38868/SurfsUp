@@ -3,16 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
+using SurfsUpProjekt.Areas.Identity;
+using Microsoft.AspNetCore.Identity;
+using System.Runtime.Versioning;
+using AspNetCore;
 
 namespace SurfsUpProjekt.Controllers
 {
     public class RentsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
+        
 
         public RentsController(SurfsUpProjektContext context)
         {
             _context = context;
+            
         }
 
         // GET: RentsController/UserIndex
@@ -129,6 +135,7 @@ namespace SurfsUpProjekt.Controllers
         {
             return _context.Board.Any(e => e.Id == id);
         }
+
         //[HttpPost, ActionName("Rent")]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> RentConfirmed(int id)
@@ -136,6 +143,13 @@ namespace SurfsUpProjekt.Controllers
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(UserIndex));
         //}
+
+        // Deletes User and return all boards in there rented table.
+
+        public ActionResult DeleteUserRentedBoard(int id)
+        {
+            return View();
+        }
     }
 
 }
