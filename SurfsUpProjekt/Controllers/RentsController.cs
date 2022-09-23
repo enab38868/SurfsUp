@@ -7,6 +7,8 @@ using SurfsUpProjekt.Areas.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Runtime.Versioning;
 using AspNetCore;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -148,7 +150,27 @@ namespace SurfsUpProjekt.Controllers
 
         public ActionResult DeleteUserRentedBoard(int id)
         {
-            return View();
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=SurfsUpProjekt.Data;Trusted_Connection=True;MultipleActiveResultSets=true";
+
+            
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("DeleteRentedBoards", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter paramId = new SqlParameter();
+                paramId.ParameterName = "@UserID";
+                paramId.Value = id;
+                cmd.Parameters.Add(paramId);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            return RedirectToAction("UserIndex");
+
+
         }
     }
 
