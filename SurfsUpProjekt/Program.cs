@@ -10,8 +10,7 @@ using SurfsUpProjekt.Models;
 using MvcMovie.Models;
 using SurfsUpProjekt.Core;
 using Microsoft.AspNetCore.Authorization;
-
-
+using Microsoft.Build.Framework;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
@@ -31,7 +30,6 @@ cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
 
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
 
 AddAuthorizationPolicies(); //AUTHORIZATION
 
@@ -70,7 +68,7 @@ app.MapRazorPages();
 
 app.Run();
 
-void AddAuthorizationPolicies()
+void AddAuthorizationPolicies() //delete maybe?
 {
     builder.Services.AddAuthorization(options =>
     {

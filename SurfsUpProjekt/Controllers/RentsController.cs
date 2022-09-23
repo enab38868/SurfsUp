@@ -13,7 +13,6 @@ namespace SurfsUpProjekt.Controllers
     public class RentsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
-
         public RentsController(SurfsUpProjektContext context)
         {
             _context = context;
@@ -108,6 +107,7 @@ namespace SurfsUpProjekt.Controllers
             {
                 return NotFound();
             }
+            int tmpID = id;
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             
@@ -125,6 +125,10 @@ namespace SurfsUpProjekt.Controllers
                 {
                     try
                     {
+                        Board board = FindBoard(id); //TODO Spørg Simon hvordan man kan lave det her smartere
+                        board.IsRented = true;
+                        _context.Update(board);
+                        await _context.SaveChangesAsync();
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
                     }
@@ -140,6 +144,18 @@ namespace SurfsUpProjekt.Controllers
         private bool BoardExists(int id)
         {
             return _context.Board.Any(e => e.Id == id);
+        }
+        private Board FindBoard(int id)
+        {
+            Board tmpBoard = new ();
+            foreach (var board in _context.Board)
+            {
+                if (id == board.Id)
+                {
+                    tmpBoard = board;
+                }
+            }
+            return tmpBoard;
         }
 
         //[HttpPost, ActionName("Rent")]
