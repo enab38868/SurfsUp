@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
 using System.Security.Claims;
+using static SurfsUpProjekt.Core.ConstantsRole;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -83,7 +85,8 @@ namespace SurfsUpProjekt.Controllers
 
             return View(board);
         }
-
+        
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> RentOut(int? id)
         {
 
@@ -96,7 +99,7 @@ namespace SurfsUpProjekt.Controllers
             return View(rent);
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RentOut(int id, string UserID, [Bind(include: "StartRent,EndRent")] Rent rent)
@@ -138,6 +141,7 @@ namespace SurfsUpProjekt.Controllers
         {
             return _context.Board.Any(e => e.Id == id);
         }
+
         //[HttpPost, ActionName("Rent")]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> RentConfirmed(int id)

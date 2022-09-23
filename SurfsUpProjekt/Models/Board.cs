@@ -48,4 +48,6 @@ public class Board
     public string? Image { get; set; }
 
     public virtual Rent? Rent { get; set; }
+    //public bool IsRented { get; set; }
+
 }

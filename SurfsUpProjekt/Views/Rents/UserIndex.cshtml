@@ -81,7 +81,11 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">View Details</a>
-                    <a asp-action="RentOut" asp-route-id="@item.Id" class="btn btn-primary">Rent</a>
+@*                    @if (User.Identity.AuthenticationType == "User" || User.Identity.AuthenticationType == "Administrator")
+                    {*@
+
+                        <a asp-action="RentOut" asp-route-id="@item.Id" class="btn btn-primary">Rent</a>
+                   @* }*@
                 </td>
             </tr>
         }

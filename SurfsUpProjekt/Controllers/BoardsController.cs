@@ -13,7 +13,7 @@ using static SurfsUpProjekt.Core.ConstantsRole;
 
 namespace SurfsUpProjekt.Controllers
 {
-    //[Authorize(Roles = $"{ConstantsRole.Roles.Administrator}")]
+    [Authorize(Roles = "Administrator")]
     public class BoardsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
