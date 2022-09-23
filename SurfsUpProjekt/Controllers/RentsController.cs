@@ -127,8 +127,10 @@ namespace SurfsUpProjekt.Controllers
                     {
                         Board board = FindBoard(id); //TODO Spørg Simon hvordan man kan lave det her smartere
                         board.IsRented = true;
+
                         _context.Update(board);
                         await _context.SaveChangesAsync();
+
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
                     }
@@ -153,6 +155,7 @@ namespace SurfsUpProjekt.Controllers
                 if (id == board.Id)
                 {
                     tmpBoard = board;
+                    break; // <- Test 
                 }
             }
             return tmpBoard;
