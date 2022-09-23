@@ -6,7 +6,6 @@ using SurfsUpProjekt.Models;
 using SurfsUpProjekt.Areas.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Runtime.Versioning;
-using AspNetCore;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -148,27 +147,24 @@ namespace SurfsUpProjekt.Controllers
 
         // Deletes User and return all boards in there rented table.
 
-        public ActionResult DeleteUserRentedBoard(int id)
+        public static void DeleteUserRentedBoard(string user)
         {
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=SurfsUpProjekt.Data;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             
-
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("DeleteRentedBoards", con);
+                SqlCommand cmd = new SqlCommand("DeleteRentedBoard", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 SqlParameter paramId = new SqlParameter();
                 paramId.ParameterName = "@UserID";
-                paramId.Value = id;
+                paramId.Value = user;
                 cmd.Parameters.Add(paramId);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-
-            return RedirectToAction("UserIndex");
 
 
         }

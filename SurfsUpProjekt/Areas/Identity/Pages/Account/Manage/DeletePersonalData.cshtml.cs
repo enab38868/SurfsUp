@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using SurfsUpProjekt.Controllers;
 
 namespace SurfsUpProjekt.Areas.Identity.Pages.Account.Manage
 {
@@ -85,13 +86,14 @@ namespace SurfsUpProjekt.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
+
+            RentsController.DeleteUserRentedBoard(userId);
 
             await _signInManager.SignOutAsync();
 
