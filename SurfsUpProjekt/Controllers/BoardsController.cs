@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Core;
 using SurfsUpProjekt.Data;
@@ -186,14 +187,14 @@ namespace SurfsUpProjekt.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]                        
-        public async Task<IActionResult> Edit(int? id, byte[] rowVersion, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
+        public async Task<IActionResult> Edit(int id, byte[] rowVersion/*, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board*/)
         {
-            if (id != null)
+            if (id == null)
             {
                 return NotFound();
             }
             // Trying to locate version?
-            var boardToUpdate = await _context.Board.Include(i => i.Name).FirstOrDefaultAsync(m => m.Id == id);
+            var boardToUpdate = await _context.Board.FirstOrDefaultAsync(m => m.Id == id);
 
             if (boardToUpdate == null)
             {
