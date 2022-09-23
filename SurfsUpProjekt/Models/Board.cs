@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace SurfsUpProjekt.Models;
 
@@ -10,8 +11,8 @@ public class Board
     
     [StringLength(60, MinimumLength = 3)]
     [Required]
-    public string Name { get; set; }
-
+    public string? Name { get; set; }
+ 
     
     [Range(1, 100)]
     [Display(Name = "Length(Feet)")]
@@ -48,4 +49,9 @@ public class Board
     public string? Image { get; set; }
 
     public virtual Rent? Rent { get; set; }
+
+    // Concurrency locking
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+
 }

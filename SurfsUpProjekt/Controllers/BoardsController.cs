@@ -47,7 +47,7 @@ namespace SurfsUpProjekt.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             var boards = from s in _context.Board
-                           select s;
+                         select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -185,36 +185,125 @@ namespace SurfsUpProjekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Administrator")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
+        [ValidateAntiForgeryToken]                        
+        public async Task<IActionResult> Edit(int? id, byte[] rowVersion, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board)
         {
-            if (id != board.Id)
+            if (id != null)
             {
                 return NotFound();
             }
+            // Trying to locate version?
+            var boardToUpdate = await _context.Board.Include(i => i.Name).FirstOrDefaultAsync(m => m.Id == id);
 
-            if (ModelState.IsValid)
+            if (boardToUpdate == null)
+            {
+                Board deletedBoard = new Board();
+                await TryUpdateModelAsync(deletedBoard);
+                ModelState.AddModelError(string.Empty,
+                    "Unable to save changes. The Board was deleted by another user.");
+                return View(deletedBoard);
+            }
+            _context.Entry(boardToUpdate).Property("RowVersion").OriginalValue = rowVersion;
+
+            if (await TryUpdateModelAsync<Board>(
+                boardToUpdate,
+                "",
+                s => s.Name, s => s.Length, s => s.Width, s => s.Thickness, s => s.Volume, s => s.Type, s => s.Price, s => s.Equipment, s => s.Image))
             {
                 try
                 {
-                    _context.Update(board);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!BoardExists(board.Id))
+                    var exceptionEntry = ex.Entries.Single();
+                    var clientValues = (Board)exceptionEntry.Entity;
+                    var databaseEntry = exceptionEntry.GetDatabaseValues();
+                    if (databaseEntry == null)
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty,
+                            "Unable to save changes. The Board was deleted by another user.");
                     }
-                    else
+                    else  //"Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image"
                     {
-                        throw;
+                        var databaseValues = (Board)databaseEntry.ToObject();
+
+                        if (databaseValues.Name != clientValues.Name)
+                        {
+                            ModelState.AddModelError("Name", $"Current value: {databaseValues.Name}");
+                        }
+                        if (databaseValues.Length != clientValues.Length)
+                        {
+                            ModelState.AddModelError("Length", $"Current value: {databaseValues.Length}");
+                        }
+                        if (databaseValues.Width != clientValues.Width)
+                        {
+                            ModelState.AddModelError("Width", $"Current value: {databaseValues.Width}");
+                        }
+                        if (databaseValues.Thickness != clientValues.Thickness)
+                        {
+                            ModelState.AddModelError("Thickness", $"Current value: {databaseValues.Thickness}");
+                        }
+                        if (databaseValues.Volume != clientValues.Volume)
+                        {
+                            ModelState.AddModelError("Volume", $"Current value: {databaseValues.Volume}");
+                        }
+                        if (databaseValues.Type != clientValues.Type)
+                        {
+                            ModelState.AddModelError("Type", $"Current value: {databaseValues.Type}");
+                        }
+                        if (databaseValues.Price != clientValues.Price)
+                        {
+                            ModelState.AddModelError("Price", $"Current value: {databaseValues.Price}");
+                        }
+                        if (databaseValues.Equipment != clientValues.Equipment)
+                        {
+                            ModelState.AddModelError("Equipment", $"Current value: {databaseValues.Equipment}");
+                        }
+                        if (databaseValues.Image != clientValues.Image)
+                        {
+                            ModelState.AddModelError("Image", $"Current value: {databaseValues.Image}");
+                        }
+
+
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                           + "was modified by another user after you got the original value. The "
+                           + "edit operation was canceled and the current values in the database "
+                           + "have been displayed. If you still want to edit this record, click "
+                           + "the Save button again. Otherwise click the Back to List hyperlink.");
+                        boardToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        ModelState.Remove("RowVersion");
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(board);
+            return View(id);
         }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(boardToUpdate);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!BoardExists(boardToUpdate.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //             throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //   return View(boardToUpdate);
+        //}
+    
+        
+
 
         // GET: Boards/Delete/5
         [Authorize(Roles = "Administrator")]
