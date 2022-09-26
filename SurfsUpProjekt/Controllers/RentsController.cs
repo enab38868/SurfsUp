@@ -41,6 +41,7 @@ namespace SurfsUpProjekt.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             var boards = from s in _context.Board
+                         where s.IsRented == false
                          select s;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -153,6 +154,7 @@ namespace SurfsUpProjekt.Controllers
                 if (id == board.Id)
                 {
                     tmpBoard = board;
+                    break; // ikke testet
                 }
             }
             return tmpBoard;
