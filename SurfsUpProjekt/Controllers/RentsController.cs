@@ -168,9 +168,10 @@ namespace SurfsUpProjekt.Controllers
 
         public static void DeleteUserRentedBoard(string user)
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=SurfsUpProjekt.Data;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=10.56.8.36;Database=PEDB10;User Id=PE-10;Password=OPENDB_10;Trusted_Connection=False;MultipleActiveResultSets=true";
 
-            
+
+
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("DeleteRentedBoard", con);
