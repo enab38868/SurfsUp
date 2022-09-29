@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SurfsUpProjekt.Models.Board>
+﻿@model PaginatedList<SurfsUpProjekt.Models.Board>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,79 +9,85 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Image)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Length(Feet)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Length)
+                Width(Inches)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Width)
+                Thickness(Inches)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Thickness)
+                Volume(L)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Volume)
+                Type
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Equipment
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Equipment)
-            </th>
-
             <th></th>
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Length)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Width)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Thickness)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Volume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Equipment)
+            </td>
+            <td>
                     <img src="@item.Image" alt="" height=100 width=100>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Length)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Width)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Thickness)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Volume)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Equipment)
-                </td>
-
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>
 @{
