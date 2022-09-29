@@ -134,6 +134,7 @@ namespace SurfsUpProjekt.Controllers
                     {
                         Board board = FindBoard(id); //TODO Spørg Simon hvordan man kan lave det her smartere
                         board.IsRented = true;
+                        board.UserID = UserID;
 
                         _context.Update(board);
                         await _context.SaveChangesAsync();
