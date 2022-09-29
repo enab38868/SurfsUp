@@ -187,14 +187,14 @@ namespace SurfsUpProjekt.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]                        
-        public async Task<IActionResult> Edit(int id, byte[] rowVersion/*, [Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image")] Board board*/)
+        public async Task<IActionResult> Edit([Bind("Id,Name,Length,Width,Thickness,Volume,Type,Price,Equipment,Image, RowVersion")] Board board)
         {
-            if (id == null)
+            if (board.Id == null)
             {
                 return NotFound();
             }
             // Trying to locate version?
-            var boardToUpdate = await _context.Board.FirstOrDefaultAsync(m => m.Id == id);
+            var boardToUpdate = await _context.Board.FirstOrDefaultAsync(m => m.Id == board.Id);
 
             if (boardToUpdate == null)
             {
@@ -204,7 +204,7 @@ namespace SurfsUpProjekt.Controllers
                     "Unable to save changes. The Board was deleted by another user.");
                 return View(deletedBoard);
             }
-            _context.Entry(boardToUpdate).Property("RowVersion").OriginalValue = rowVersion;
+            _context.Entry(boardToUpdate).Property("RowVersion").OriginalValue = board.RowVersion;
 
             if (await TryUpdateModelAsync<Board>(
                 boardToUpdate,
@@ -278,7 +278,7 @@ namespace SurfsUpProjekt.Controllers
                     }
                 }
             }
-            return View(id);
+            return View(board);
         }
         //    if (ModelState.IsValid)
         //    {
