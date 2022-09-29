@@ -46,4 +46,11 @@ public class Board
     public string? Equipment { get; set; }
 
     public string? Image { get; set; }
+
+    public virtual Rent? Rent { get; set; }
+    public bool IsRented { get; set; } // Default is false
+
+    [ForeignKey("User")]
+    public string? UserID { get; set; }
+
 }

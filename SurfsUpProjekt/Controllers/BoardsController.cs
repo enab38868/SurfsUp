@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SurfsUpProjekt.Core;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
+using static SurfsUpProjekt.Core.ConstantsRole;
 
 namespace SurfsUpProjekt.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class BoardsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
@@ -67,7 +71,6 @@ namespace SurfsUpProjekt.Controllers
             int pageSize = 4;
             return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
 
         // GET: Boards/Details/5
         public async Task<IActionResult> Details(int? id)

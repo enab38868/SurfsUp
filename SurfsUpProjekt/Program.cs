@@ -1,14 +1,24 @@
-﻿using LazZiya.TagHelpers;
+using LazZiya.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SurfsUpProjekt.Data;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
+using SurfsUpProjekt.Models;
+using MvcMovie.Models;
+using SurfsUpProjekt.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Build.Framework;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SurfsUpProjektContext") ?? throw new InvalidOperationException("Connection string 'SurfsUpProjektContext' not found.")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>() // Authorization??
+    .AddEntityFrameworkStores<SurfsUpProjektContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -21,13 +31,19 @@ cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
+AddAuthorizationPolicies(); //AUTHORIZATION
+
 var app = builder.Build();
-//app.UseRequestLocalization(new RequestLocalizationOptions
-//{
-//    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(cultureInfo), 
-//    SupportedCultures = new List<CultureInfo> { cultureInfo},
-//    SupportedUICultures = new List<CultureInfo> { cultureInfo }
-//});
+
+
+using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+    await SeedData.InitializeRoles(services);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -40,11 +56,24 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Boards}/{action=Index}/{id?}");
+    pattern: "{controller=Rents}/{action=UserIndex}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();
+
+void AddAuthorizationPolicies() //TODO delete maybe?
+{
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy(ConstantsRole.Policies.RequireAdmin, policy => policy.RequireRole(ConstantsRole.Roles.Administrator));
+        options.AddPolicy(ConstantsRole.Policies.RequireManager, policy => policy.RequireRole(ConstantsRole.Roles.Manager));
+
+    });
+}
