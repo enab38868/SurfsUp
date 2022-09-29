@@ -23,13 +23,17 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 // Google Login halløj
 
-var configuration = builder.Configuration;
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = configuration["Authentication:Google:811708657220-j5sfn5tf5r76hjct9etd7mbuuejmr23o.apps.googleusercontent.com"];
-    googleOptions.ClientSecret = configuration["Authentication:Google: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"];
+    googleOptions.ClientId = "811708657220-j5sfn5tf5r76hjct9etd7mbuuejmr23o.apps.googleusercontent.com";
+    googleOptions.ClientSecret = "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";
 });
+builder.Services.AddAuthentication().AddFacebook(facebookoptions =>
+{
+    facebookoptions.AppId = "778589450131162";
+    facebookoptions.AppSecret = "97356bda0d4d79c7c29a37515cd5a691";
 
+});
 
 
 

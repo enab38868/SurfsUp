@@ -1,10 +1,7 @@
 ﻿@page
 @model LoginModel
 
-//
-<head>
-    <meta name="google-signin-client_id" content="811708657220-j5sfn5tf5r76hjct9etd7mbuuejmr23o.apps.googleusercontent.com">
-</head>
+
 
 @{
     ViewData["Title"] = "Log in";
@@ -16,8 +13,6 @@
         <section>
             <form id="account" method="post">
                 <h2>Use a local account to log in.</h2>
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
@@ -90,7 +85,6 @@
 
 
 @section Scripts {
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }
 
