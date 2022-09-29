@@ -68,7 +68,7 @@ app.MapRazorPages();
 
 app.Run();
 
-void AddAuthorizationPolicies() //delete maybe?
+void AddAuthorizationPolicies() //TODO delete maybe?
 {
     builder.Services.AddAuthorization(options =>
     {

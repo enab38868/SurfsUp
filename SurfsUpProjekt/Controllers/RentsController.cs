@@ -161,14 +161,5 @@ namespace SurfsUpProjekt.Controllers
             }
             return tmpBoard;
         }
-
-        //[HttpPost, ActionName("Rent")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RentConfirmed(int id)
-        //{
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(UserIndex));
-        //}
     }
-
 }
