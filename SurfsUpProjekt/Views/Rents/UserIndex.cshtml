@@ -81,7 +81,10 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">View Details</a>
-                    <a asp-action="RentOut" asp-route-id="@item.Id" class="btn btn-primary">Rent</a>
+                    @if (this.User.Identity.IsAuthenticated) // Shows button when logged in 
+                    {
+                        <a asp-action="RentOut" asp-route-id="@item.Id" class="btn btn-primary">Rent</a>
+                    }
                 </td>
             </tr>
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Data;
@@ -8,18 +10,18 @@ using Microsoft.AspNetCore.Identity;
 using System.Runtime.Versioning;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Security.Claims;
+using static SurfsUpProjekt.Core.ConstantsRole;
 
 namespace SurfsUpProjekt.Controllers
 {
     public class RentsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
-        
 
         public RentsController(SurfsUpProjektContext context)
         {
             _context = context;
-            
         }
 
         // GET: RentsController/UserIndex
@@ -45,6 +47,7 @@ namespace SurfsUpProjekt.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             var boards = from s in _context.Board
+                         where s.IsRented == false
                          select s;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -88,7 +91,8 @@ namespace SurfsUpProjekt.Controllers
 
             return View(board);
         }
-
+        
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> RentOut(int? id)
         {
 
@@ -100,14 +104,22 @@ namespace SurfsUpProjekt.Controllers
             var rent = new Rent();
             return View(rent);
         }
+
+        [Authorize(Roles = "User")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentOut(int id, [Bind(include: "StartRent,EndRent")] Rent rent)
+        public async Task<IActionResult> RentOut(int id, string UserID, [Bind(include: "StartRent,EndRent")] Rent rent)
         {
             if (!BoardExists(id))
             {
                 return NotFound();
             }
+            int tmpID = id;
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            
+            UserID = claims.Value;
+            rent.UserID = UserID;
 
             rent.BoardId = id;
             if (rent.StartRent > rent.EndRent)
@@ -116,10 +128,16 @@ namespace SurfsUpProjekt.Controllers
             }
             else
             {
-                if (ModelState.IsValid)
+                if (rent.UserID != null && rent.BoardId != 0) //vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
                 {
                     try
                     {
+                        Board board = FindBoard(id); //TODO Spørg Simon hvordan man kan lave det her smartere
+                        board.IsRented = true;
+
+                        _context.Update(board);
+                        await _context.SaveChangesAsync();
+
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
                     }
@@ -127,7 +145,7 @@ namespace SurfsUpProjekt.Controllers
                     {
                         throw;
                     }
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(UserIndex));
                 }
             }
             return View(rent);
@@ -167,6 +185,19 @@ namespace SurfsUpProjekt.Controllers
             }
 
 
+        }
+        private Board FindBoard(int id)
+        {
+            Board tmpBoard = new ();
+            foreach (var board in _context.Board)
+            {
+                if (id == board.Id)
+                {
+                    tmpBoard = board;
+                    break; // <- Test 
+                }
+            }
+            return tmpBoard;
         }
     }
 
