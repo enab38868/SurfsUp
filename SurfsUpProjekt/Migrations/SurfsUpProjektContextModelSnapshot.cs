@@ -260,6 +260,9 @@ namespace SurfsUpProjekt.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Volume")
                         .HasColumnType("float");
 
@@ -268,7 +271,7 @@ namespace SurfsUpProjekt.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Board", (string)null);
+                    b.ToTable("Board");
                 });
 
             modelBuilder.Entity("SurfsUpProjekt.Models.Rent", b =>
@@ -279,6 +282,12 @@ namespace SurfsUpProjekt.Migrations
                     b.Property<DateTime>("EndRent")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte[]>("RowVersionRent")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime>("StartRent")
                         .HasColumnType("datetime2");
 
@@ -288,7 +297,7 @@ namespace SurfsUpProjekt.Migrations
 
                     b.HasKey("BoardId");
 
-                    b.ToTable("Rent", (string)null);
+                    b.ToTable("Rent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
