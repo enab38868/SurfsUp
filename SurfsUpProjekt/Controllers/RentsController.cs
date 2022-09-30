@@ -12,6 +12,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
 using static SurfsUpProjekt.Core.ConstantsRole;
+using System.Configuration;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -31,6 +32,17 @@ namespace SurfsUpProjekt.Controllers
                 string searchString,
                 int? pageNumber)
         {
+            if (_context.Rent != null) 
+            {
+                foreach (var board in _context.Rent)
+                {
+                    if (DateTime.Now > board.EndRent)
+                    {
+                        DeleteUserRentedBoardViaDateTime(board.BoardId);
+                    }
+                }
+            }
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
@@ -91,11 +103,10 @@ namespace SurfsUpProjekt.Controllers
 
             return View(board);
         }
-        
-        [Authorize(Roles = "User")]
+
+        [Authorize(Roles = "User,Administrator")]
         public async Task<IActionResult> RentOut(int? id)
         {
-
             if (id == null || _context.Board == null)
             {
                 return NotFound();
@@ -105,7 +116,7 @@ namespace SurfsUpProjekt.Controllers
             return View(rent);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RentOut(int id, string UserID, [Bind(include: "StartRent,EndRent")] Rent rent)
@@ -117,7 +128,7 @@ namespace SurfsUpProjekt.Controllers
             int tmpID = id;
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
+
             UserID = claims.Value;
             rent.UserID = UserID;
 
@@ -128,11 +139,11 @@ namespace SurfsUpProjekt.Controllers
             }
             else
             {
-                if (rent.UserID != null && rent.BoardId != 0) //vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
+                if (rent.UserID != null && rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
                 {
                     try
                     {
-                        Board board = FindBoard(id); //TODO Spørg Simon hvordan man kan lave det her smartere
+                        Board board = FindBoard(id);
                         board.IsRented = true;
                         board.UserID = UserID;
 
@@ -151,27 +162,17 @@ namespace SurfsUpProjekt.Controllers
             }
             return View(rent);
         }
+
         private bool BoardExists(int id)
         {
             return _context.Board.Any(e => e.Id == id);
         }
 
-        //[HttpPost, ActionName("Rent")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RentConfirmed(int id)
-        //{
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(UserIndex));
-        //}
-
         // Deletes User and return all boards in there rented table.
-
         public static void DeleteUserRentedBoard(string user)
         {
             string connectionString = "Server=10.56.8.36;Database=PEDB10;User Id=PE-10;Password=OPENDB_10;Trusted_Connection=False;MultipleActiveResultSets=true";
-
-
-
+            //TODO fix, så connectionstring ikke ligger her?
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("DeleteRentedBoard", con);
@@ -185,22 +186,38 @@ namespace SurfsUpProjekt.Controllers
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-
-
         }
+        public static void DeleteUserRentedBoardViaDateTime(int boardId)
+        {
+            string connectionString = "Server=10.56.8.36;Database=PEDB10;User Id=PE-10;Password=OPENDB_10;Trusted_Connection=False;MultipleActiveResultSets=true";
+            //TODO fix, så connectionstring ikke ligger her?
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("DeleteBoardDateTime", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter paramId = new SqlParameter();
+                paramId.ParameterName = "@BoardId";
+                paramId.Value = boardId;
+                cmd.Parameters.Add(paramId);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         private Board FindBoard(int id)
         {
-            Board tmpBoard = new ();
+            Board tmpBoard = new();
             foreach (var board in _context.Board)
             {
                 if (id == board.Id)
                 {
                     tmpBoard = board;
-                    break; // <- Test 
+                    break; //TODO <- Test 
                 }
             }
             return tmpBoard;
         }
     }
-
 }
