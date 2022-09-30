@@ -153,9 +153,13 @@ namespace SurfsUpProjekt.Controllers
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
                     }
-                    catch (Exception ex)
+                    catch (SqlException ex)
                     {
-                        throw;
+                        ModelState.AddModelError(String.Empty, "Board is already rented bitch");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        ModelState.AddModelError(String.Empty, "Someone was faster than you bitch");
                     }
                     return RedirectToAction(nameof(UserIndex));
                 }
