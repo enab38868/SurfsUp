@@ -1,4 +1,6 @@
-﻿namespace SurfsUpProjekt.Core
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace SurfsUpProjekt.Core
 {
     public class ConstantsRole
     {
@@ -13,6 +15,7 @@
         {
             public const string RequireAdmin = "RequireAdmin";
             public const string RequireManager = "RequireManager";
+
         }
     }
 }

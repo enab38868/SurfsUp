@@ -32,7 +32,7 @@ namespace SurfsUpProjekt.Controllers
                 string searchString,
                 int? pageNumber)
         {
-            if (_context.Rent != null) 
+            if (_context.Rent != null)
             {
                 foreach (var board in _context.Rent)
                 {
@@ -119,20 +119,22 @@ namespace SurfsUpProjekt.Controllers
         [Authorize(Roles = "User,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentOut(int id, string UserID, [Bind(include: "StartRent,EndRent")] Rent rent)
+        public async Task<IActionResult> RentOut(int id, string userID, [Bind(include: "StartRent,EndRent,RowVersionRent")] Rent rent)
         {
             if (!BoardExists(id))
             {
                 return NotFound();
             }
+
             int tmpID = id;
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            UserID = claims.Value;
-            rent.UserID = UserID;
+            userID = claims.Value;
+            rent.UserID = userID;
 
             rent.BoardId = id;
+
             if (rent.StartRent > rent.EndRent)
             {
                 ModelState.AddModelError("StartRent", "Start date must be before end date");
@@ -145,23 +147,25 @@ namespace SurfsUpProjekt.Controllers
                     {
                         Board board = FindBoard(id);
                         board.IsRented = true;
-                        board.UserID = UserID;
+                        board.UserID = userID;
 
                         _context.Update(board);
                         await _context.SaveChangesAsync();
 
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
+
+                        return RedirectToAction(nameof(UserIndex));
+
                     }
                     catch (SqlException ex)
                     {
-                        ModelState.AddModelError(String.Empty, "Board is already rented bitch");
+                        ModelState.AddModelError(string.Empty, "Board is already rented bitch");
                     }
                     catch (DbUpdateException ex)
                     {
-                        ModelState.AddModelError(String.Empty, "Someone was faster than you bitch");
+                        ModelState.AddModelError(string.Empty, "Someone was faster than you bitch");
                     }
-                    return RedirectToAction(nameof(UserIndex));
                 }
             }
             return View(rent);
