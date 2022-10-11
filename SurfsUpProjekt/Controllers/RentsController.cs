@@ -59,11 +59,13 @@ namespace SurfsUpProjekt.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
+            // Default sorting without premium boards
             var boards = from s in _context.Board
                          where s.IsRented == false
                          where s.Premium == false
                          select s;
             
+            // If you are logged in it shows all the boards
             if (User?.Identity != null && User.Identity.IsAuthenticated)
             {
                 ViewData["CurrentFilter"] = searchString;
