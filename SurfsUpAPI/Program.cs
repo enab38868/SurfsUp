@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using SurfsUpProjekt.Data;
+using Microsoft.Extensions.Options;
+using SurfsUpAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+builder.Services.AddDbContext<APIContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SurfsUpProjektContext") ?? throw new InvalidOperationException("Connection string 'SurfsUpProjektContext' not found.")));
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
