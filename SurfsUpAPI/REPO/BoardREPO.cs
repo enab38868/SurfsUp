@@ -16,7 +16,9 @@ namespace SurfsUpAPI.REPO
         public string ConString()
         {
 
-            return configuration.GetConnectionString("SurfsUpProjektContext");
+            return configuration.GetConnectionString("APIContext");
+            // SurfsUpProjektContext 
+
         }
     }
 }

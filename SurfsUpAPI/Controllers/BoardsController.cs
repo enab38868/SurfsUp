@@ -13,15 +13,15 @@ namespace SurfsUpAPI.Controllers
     public class BoardsController : ControllerBase
     {
         private readonly APIContext _context;
-        private readonly BoardREPO _boardREPO;
+        //private readonly BoardREPO _boardREPO;
 
-        public BoardsController(BoardREPO boardREPO, APIContext context)
+        public BoardsController(/*BoardREPO boardREPO,*/ APIContext context)
         {
-            _boardREPO = boardREPO;
+            //_boardREPO = boardREPO;
             _context = context;
         }
 
-        [HttpGet("/UserIndex")]
+        [HttpGet]
         public async Task<IEnumerable<Board>> GetAllBoards()
         {
             List<Board> boardslist = new List<Board>();//Services(mappe). fks Boardserverice 

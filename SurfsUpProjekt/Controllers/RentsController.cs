@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using SurfsUpProjekt.Data;
 using SurfsUpProjekt.Models;
 using SurfsUpProjekt.Areas.Identity;
-using Microsoft.AspNetCore.Identity;
 using System.Runtime.Versioning;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
+
 using static SurfsUpProjekt.Core.ConstantsRole;
 using System.Configuration;
 
