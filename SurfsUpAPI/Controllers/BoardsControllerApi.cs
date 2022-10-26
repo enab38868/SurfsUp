@@ -6,16 +6,19 @@ using System.Net;
 using SurfsUpAPI.REPO;
 using SurfsUpAPI.Model;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace SurfsUpAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Boards")]
     [ApiController]
-    public class BoardsController : ControllerBase
+    [ApiVersion("1.0")]
+    public class BoardsControllerApi : ControllerBase
     {
         private readonly APIContext _context;
 
-        public BoardsController(APIContext context)
+        public BoardsControllerApi(APIContext context)
         {
             _context = context;
         }
@@ -25,28 +28,27 @@ namespace SurfsUpAPI.Controllers
         {
             return _context.Board.OrderBy(a => a.Name).ToList();
         }
-        //[HttpGet, Route(]
-        //public async Task<ActionResult> GetBoard(int id)
-        //{
 
-        //    return Ok( _context.Board.Find(id));
-        //}
+        [HttpGet, Route("{id}")]
+        public async Task<ActionResult> GetBoard(int id)
+        {
+            return Ok(_context.Board.Find(id));
+        }
+
         [HttpPost, Route("Rent/{id}")]
-        public async Task<IActionResult> RentOut(int id, string userID, [Bind(include: "StartRent,EndRent,RowVersionRent")] Rent rent)
+        public async Task<IActionResult> RentOut(int id, [FromBody] Rent rent)
         {
             if (!BoardExists(id))
             {
                 return NotFound();
             }
+            int tmpID = id; // IDK what it does
 
-            int tmpID = id;
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            userID = claims.Value;
-            rent.UserID = userID;
-
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            //userID = claims.Value;
             rent.BoardId = id;
+            //rent.UserID = userID;
 
             if (rent.StartRent > rent.EndRent)
             {
@@ -60,28 +62,27 @@ namespace SurfsUpAPI.Controllers
                     {
                         Board board = FindBoard(id);
                         board.IsRented = true;
-                        board.UserID = userID;
+                        board.UserID = rent.UserID;
 
                         _context.Update(board);
                         await _context.SaveChangesAsync();
 
                         _context.Add(rent);
                         await _context.SaveChangesAsync();
-
-
                     }
                     catch (SqlException ex)
                     {
-                        ModelState.AddModelError(string.Empty, "Board is already rented bitch");
+                        ModelState.AddModelError(string.Empty, "Board is already rented");
                     }
                     catch (DbUpdateException ex)
                     {
-                        ModelState.AddModelError(string.Empty, "Someone was faster than you bitch");
+                        ModelState.AddModelError(string.Empty, "Someone was faster than you");
                     }
                 }
             }
             return Ok(rent);
         }
+
         private bool BoardExists(int id)
         {
             return _context.Board.Any(e => e.Id == id);

@@ -18,6 +18,6 @@ namespace SurfsUpAPI.Model
         //public virtual Board Board { get; set; }
 
         [ForeignKey("User")]
-        public string UserID { get; set; }
+        public string? UserID { get; set; }
     }
 }

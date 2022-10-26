@@ -19,10 +19,12 @@ namespace SurfsUpProjekt.Controllers
     public class RentsController : Controller
     {
         private readonly SurfsUpProjektContext _context;
+        private UserManager<IdentityUser> _userManager;
 
-        public RentsController(SurfsUpProjektContext context)
+        public RentsController(SurfsUpProjektContext context, UserManager<IdentityUser> UserManager)
         {
             _context = context;
+            _userManager = UserManager;
         }
 
         // GET: RentsController/UserIndex
@@ -119,56 +121,71 @@ namespace SurfsUpProjekt.Controllers
         [Authorize(Roles = "User,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RentOut(int id, string userID, [Bind(include: "StartRent,EndRent,RowVersionRent")] Rent rent)
+        public async Task<IActionResult> RentOut(int id, [Bind(include: "StartRent,EndRent,RowVersionRent")] Rent rent)
         {
-            if (!BoardExists(id))
-            {
-                return NotFound();
-            }
+            HttpClient client = new HttpClient();
 
-            int tmpID = id;
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var UserID = _userManager.GetUserId(User);
+            rent.UserID = UserID;
+            rent.BoardId = id; 
 
-            userID = claims.Value;
-            rent.UserID = userID;
+            string url = $"https://localhost:7217/api/Boards/Rent/{id}";
 
-            rent.BoardId = id;
+            await client.PostAsJsonAsync(url, rent);
+            //using HttpResponseMessage response = await client.PostAsJsonAsync(url, rent);
+            //response.EnsureSuccessStatusCode(); 
 
-            if (rent.StartRent > rent.EndRent)
-            {
-                ModelState.AddModelError("StartRent", "Start date must be before end date");
-            }
-            else
-            {
-                if (rent.UserID != null && rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
-                {
-                    try
-                    {
-                        Board board = FindBoard(id);
-                        board.IsRented = true;
-                        board.UserID = userID;
+            return RedirectToAction(nameof(UserIndex)); 
 
-                        _context.Update(board);
-                        await _context.SaveChangesAsync();
+            #region old
+            //if (!BoardExists(id))
+            //{
+            //    return NotFound();
+            //}
 
-                        _context.Add(rent);
-                        await _context.SaveChangesAsync();
+            //int tmpID = id;
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                        return RedirectToAction(nameof(UserIndex));
+            //userID = claims.Value;
+            //rent.UserID = userID;
+            //rent.BoardId = id;
 
-                    }
-                    catch (SqlException ex)
-                    {
-                        ModelState.AddModelError(string.Empty, "Board is already rented bitch");
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        ModelState.AddModelError(string.Empty, "Someone was faster than you bitch");
-                    }
-                }
-            }
-            return View(rent);
+            //if (rent.StartRent > rent.EndRent)
+            //{
+            //    ModelState.AddModelError("StartRent", "Start date must be before end date");
+            //}
+            //else
+            //{
+            //    if (rent.UserID != null && rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
+            //    {
+            //        try
+            //        {
+            //            Board board = FindBoard(id);
+            //            board.IsRented = true;
+            //            board.UserID = userID;
+
+            //            _context.Update(board);
+            //            await _context.SaveChangesAsync();
+
+            //            _context.Add(rent);
+            //            await _context.SaveChangesAsync();
+
+            //            return RedirectToAction(nameof(UserIndex));
+
+            //        }
+            //        catch (SqlException ex)
+            //        {
+            //            ModelState.AddModelError(string.Empty, "Board is already rented bitch");
+            //        }
+            //        catch (DbUpdateException ex)
+            //        {
+            //            ModelState.AddModelError(string.Empty, "Someone was faster than you bitch");
+            //        }
+            //    }
+            //}
+            //return View(rent);
+            #endregion
         }
 
         private bool BoardExists(int id)
