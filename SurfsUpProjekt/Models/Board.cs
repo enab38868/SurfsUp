@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace SurfsUpProjekt.Models;
 
@@ -48,9 +49,16 @@ public class Board
     public string? Image { get; set; }
 
     public virtual Rent? Rent { get; set; }
+
+    // Concurrency locking
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+
     public bool IsRented { get; set; } // Default is false
 
     [ForeignKey("User")]
     public string? UserID { get; set; }
+
+    public bool Premium { get; set; }
 
 }

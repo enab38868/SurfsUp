@@ -59,6 +59,13 @@
             @Html.DisplayFor(model => model.Equipment)
             <br>
         </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Premium)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Premium)
+            <br>
+        </dd>
         <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
         <a asp-action="Index">Back to List</a>
     </dl>

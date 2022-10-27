@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurfsUpProjekt.Data;
 
@@ -11,9 +12,10 @@ using SurfsUpProjekt.Data;
 namespace SurfsUpProjekt.Migrations
 {
     [DbContext(typeof(SurfsUpProjektContext))]
-    partial class SurfsUpProjektContextModelSnapshot : ModelSnapshot
+    [Migration("20220920095414_RowVersion")]
+    partial class RowVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,9 +240,6 @@ namespace SurfsUpProjekt.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsRented")
-                        .HasColumnType("bit");
-
                     b.Property<double>("Length")
                         .HasColumnType("float");
 
@@ -248,9 +247,6 @@ namespace SurfsUpProjekt.Migrations
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
-
-                    b.Property<bool>("Premium")
-                        .HasColumnType("bit");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -268,9 +264,6 @@ namespace SurfsUpProjekt.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Volume")
                         .HasColumnType("float");
@@ -293,10 +286,6 @@ namespace SurfsUpProjekt.Migrations
 
                     b.Property<DateTime>("StartRent")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BoardId");
 

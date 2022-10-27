@@ -13,6 +13,7 @@ using System.Security.Claims;
 
 using static SurfsUpProjekt.Core.ConstantsRole;
 using System.Configuration;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SurfsUpProjekt.Controllers
 {
@@ -60,9 +61,20 @@ namespace SurfsUpProjekt.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
+            // Default sorting without premium boards
             var boards = from s in _context.Board
                          where s.IsRented == false
+                         where s.Premium == false
                          select s;
+            
+            // If you are logged in it shows all the boards
+            if (User?.Identity != null && User.Identity.IsAuthenticated)
+            {
+                ViewData["CurrentFilter"] = searchString;
+                boards = from s in _context.Board
+                             where s.IsRented == false
+                             select s;
+            }
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -244,5 +256,7 @@ namespace SurfsUpProjekt.Controllers
             }
             return tmpBoard;
         }
+
+
     }
 }
