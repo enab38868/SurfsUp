@@ -6,7 +6,7 @@ using SurfsUpAPI.Model;
 namespace SurfsUpAPI.Controllers
 {
     [ApiController]
-    [Route("api/Boards/V2")]
+    [Route("api/Boards")]
     [ApiVersion("2.0")]
     public class BoardsControllerApiV2 : Controller
     {
@@ -23,7 +23,7 @@ namespace SurfsUpAPI.Controllers
             return _context.Board.OrderBy(a => a.Name).ToList().Where(b => b.Premium == false);
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetBoard(int id)
         {
             var boards = await _context.Board.FindAsync(id);
@@ -44,7 +44,7 @@ namespace SurfsUpAPI.Controllers
             }
         }
 
-        [HttpPost, Route("Rent/{id}")]
+        [HttpPost("Rent/{id}")]
         public async Task<IActionResult> RentOut(int id, [FromBody] Rent rent)
         {
             if (!BoardExists(id))

@@ -29,13 +29,13 @@ namespace SurfsUpAPI.Controllers
             return _context.Board.OrderBy(a => a.Name).ToList();
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetBoard(int id)
         {
             return Ok(_context.Board.Find(id));
         }
 
-        [HttpPost, Route("Rent/{id}")]
+        [HttpPost("Rent/{id}")]
         public async Task<IActionResult> RentOut(int id, [FromBody] Rent rent)
         {
             if (!BoardExists(id))

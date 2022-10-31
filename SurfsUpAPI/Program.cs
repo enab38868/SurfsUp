@@ -27,6 +27,14 @@ builder.Services.AddApiVersioning(options =>
         new HeaderApiVersionReader("X-Version"));
 
 });
+builder.Services.AddVersionedApiExplorer(
+    options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
+
 
 var app = builder.Build();
 
