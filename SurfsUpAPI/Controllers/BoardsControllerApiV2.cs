@@ -1,41 +1,50 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using SurfsUpAPI.REPO;
 using SurfsUpAPI.Model;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using System.Text.Json;
 
 namespace SurfsUpAPI.Controllers
 {
-    [Route("api/Boards")]
     [ApiController]
-    [ApiVersion("1.0")]
-    public class BoardsControllerApi : ControllerBase
+    [Route("api/Boards")]
+    [ApiVersion("2.0")]
+    public class BoardsControllerApiV2 : Controller
     {
         private readonly APIContext _context;
 
-        public BoardsControllerApi(APIContext context)
+        public BoardsControllerApiV2(APIContext context)
         {
             _context = context;
         }
 
-        [HttpGet, Route("GetAllBoards")]
+        [HttpGet]
         public async Task<IEnumerable<Board>> GetAllBoards()
         {
-            return _context.Board.OrderBy(a => a.Name).ToList();
+            return _context.Board.OrderBy(a => a.Name).ToList().Where(b => b.Premium == false);
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetBoard(int id)
         {
-            return Ok(_context.Board.Find(id));
+            var boards = await _context.Board.FindAsync(id);
+
+            if (!BoardExists(id))
+            {
+                return NotFound();
+            }
+
+            else if (boards.Premium == true)
+            {
+                return Unauthorized();
+            }
+
+            else
+            {
+                return Ok(_context.Board.Find(id));
+            }
         }
 
-        [HttpPost, Route("Rent/{id}")]
+        [HttpPost("Rent/{id}")]
         public async Task<IActionResult> RentOut(int id, [FromBody] Rent rent)
         {
             if (!BoardExists(id))
@@ -100,5 +109,6 @@ namespace SurfsUpAPI.Controllers
             }
             return tmpBoard;
         }
+
     }
 }

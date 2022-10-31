@@ -48,7 +48,7 @@ public class Board
 
     public string? Image { get; set; }
 
-    public virtual Rent? Rent { get; set; }
+    //public virtual Rent? Rent { get; set; }
 
     // Concurrency locking
     [Timestamp]

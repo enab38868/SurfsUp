@@ -19,7 +19,6 @@ builder.Services.AddDbContext<SurfsUpProjektContext>(options =>
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>() // Authorization??
     .AddEntityFrameworkStores<SurfsUpProjektContext>();
-
 // Google Login halløj
 
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
