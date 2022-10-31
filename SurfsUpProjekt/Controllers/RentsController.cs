@@ -19,6 +19,8 @@ namespace SurfsUpProjekt.Controllers
 {
     public class RentsController : Controller
     {
+
+
         private readonly SurfsUpProjektContext _context;
         private UserManager<IdentityUser> _userManager;
 
