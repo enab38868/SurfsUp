@@ -98,6 +98,19 @@ namespace SurfsUpProjekt.Controllers
             }
             int pageSize = 4;
             return View(await PaginatedList<Board>.CreateAsync(boards.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+            string URL;
+            if (User.Identity.IsAuthenticated)
+            {
+                URL = "https://localhost:7217/api/Boards?api-version=1.0";
+            }
+            else
+            {
+                URL = "https://localhost:7217/api/Boards?api-version=2.0";
+            }
+
+
+
         }
 
         // GET: RentsController/Details/5

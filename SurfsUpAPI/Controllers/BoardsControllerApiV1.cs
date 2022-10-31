@@ -11,14 +11,14 @@ using System.Text.Json;
 
 namespace SurfsUpAPI.Controllers
 {
-    [Route("api/Boards")]
     [ApiController]
+    [Route("api/Boards")]
     [ApiVersion("1.0")]
-    public class BoardsControllerApi : ControllerBase
+    public class BoardsControllerApiV1 : ControllerBase
     {
         private readonly APIContext _context;
 
-        public BoardsControllerApi(APIContext context)
+        public BoardsControllerApiV1(APIContext context)
         {
             _context = context;
         }
