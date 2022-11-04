@@ -25,9 +25,10 @@ namespace SurfsUpAPI.Controllers
             HttpClient client = new();
             string cityname = city;           
             string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
-            var result = client.GetFromJsonAsync<WeatherForecast.Root>(api);
+            
+            var result = await client.GetFromJsonAsync<WeatherForecast.Root>(api);
 
-            return await(result);
+            return result;
 
         }
 
