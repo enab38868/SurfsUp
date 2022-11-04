@@ -7,21 +7,26 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace SurfsUpAPI.Controllers
 {
+    [ApiController]
+    [Route("api/Weather")]
     public class WeatherController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
+       
+   
+        //public IActionResult Index()
+        //{
+        //    return View();
             
-        }
-        public async Task <List<WeatherForecast.Root>> WeatherByCity()
+        //}
+        [HttpGet]
+        public async Task <WeatherForecast.Root> WeatherByCity()
         {
             HttpClient client = new();
             string cityname = "";
             string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
             var result = client.GetFromJsonAsync<WeatherForecast.Root>(api);
 
-            return (result);
+            return await (result);
 
         }
 
