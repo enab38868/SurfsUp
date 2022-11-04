@@ -133,7 +133,7 @@ namespace SurfsUpProjekt.Controllers
             return View(board);
         }
 
-        [Authorize(Roles = "User,Administrator")]
+        //[Authorize(Roles = "User,Administrator")]
         public async Task<IActionResult> RentOut(int? id)
         {
             if (id == null || _context.Board == null)
@@ -145,7 +145,7 @@ namespace SurfsUpProjekt.Controllers
             return View(rent);
         }
 
-        [Authorize(Roles = "User,Administrator")]
+        //[Authorize(Roles = "User,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RentOut(int id, [Bind(include: "StartRent,EndRent,RowVersionRent")] Rent rent)

@@ -53,6 +53,7 @@ namespace SurfsUpAPI.Controllers
             }
             int tmpID = id; // IDK what it does
 
+
             //var claimsIdentity = (ClaimsIdentity)User.Identity;
             //var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             //userID = claims.Value;
@@ -65,7 +66,7 @@ namespace SurfsUpAPI.Controllers
             }
             else
             {
-                if (rent.UserID != null && rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
+                if (/*rent.UserID != null &&*/ rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
                 {
                     try
                     {
