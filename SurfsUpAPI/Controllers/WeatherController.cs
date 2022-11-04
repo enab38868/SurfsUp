@@ -11,17 +11,9 @@ namespace SurfsUpAPI.Controllers
     [Route("api/Weather")]
     public class WeatherController : Controller
     {
-       
-   
-        //public IActionResult Index()
-        //{
-        //    return View();
-            
-        //}
         [HttpGet]
         public async Task <WeatherForecast.Root> WeatherByCity(string city)
-        {
-            
+        {         
             HttpClient client = new();
             string cityname = city;           
             string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
@@ -29,8 +21,6 @@ namespace SurfsUpAPI.Controllers
             var result = await client.GetFromJsonAsync<WeatherForecast.Root>(api);
 
             return result;
-
         }
-
     }
 }
