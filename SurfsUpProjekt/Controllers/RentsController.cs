@@ -19,8 +19,6 @@ namespace SurfsUpProjekt.Controllers
 {
     public class RentsController : Controller
     {
-
-
         private readonly SurfsUpProjektContext _context;
         private UserManager<IdentityUser> _userManager;
 
@@ -110,9 +108,6 @@ namespace SurfsUpProjekt.Controllers
             {
                 URL = "https://localhost:7217/api/Boards?api-version=2.0";
             }
-
-
-
         }
 
         // GET: RentsController/Details/5
@@ -271,7 +266,5 @@ namespace SurfsUpProjekt.Controllers
             }
             return tmpBoard;
         }
-
-
     }
 }

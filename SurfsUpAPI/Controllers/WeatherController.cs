@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace SurfsUpAPI.Controllers
 {
     [ApiController]
-    [Route("api/Weather")]
+    [Route("api/Weather/{CityName}")]
     public class WeatherController : Controller
     {
         [HttpGet]
