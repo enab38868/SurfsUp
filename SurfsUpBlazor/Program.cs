@@ -17,7 +17,6 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
     .AddEntityFrameworkStores<SurfsUpBlazorContext>();
 //// Google Login halløj
 
-
 //builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 //{
 //    googleOptions.ClientId = "811708657220-j5sfn5tf5r76hjct9etd7mbuuejmr23o.apps.googleusercontent.com";

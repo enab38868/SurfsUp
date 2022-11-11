@@ -11,7 +11,7 @@
 <p>This component demonstrates fetching data from the server.</p>
 
 <input class="form-text" @bind-value=@CityName />
-<button class="btn btn-primary" @onclick="WeatherCityName">Knap</button>
+<button class="btn btn-primary" @onclick="GetWeatherApiCityName">Knap</button>
 @if (weatherForecast == null)
 {
     <p><em>Loading...</em></p>
@@ -53,10 +53,14 @@ else
     //    weatherForecast = await Http.GetFromJsonAsync<Root>(url);
     //}
 
-    public async Task WeatherCityName()
+    public async Task GetWeatherApiCityName()
     {
-        string url = $"https://localhost:7217/api/Weather/{CityName}";
-        weatherForecast = await Http.GetFromJsonAsync<Root>(url);
-        //weatherForecast = await Http.GetFromJsonAsync<List<Weather>>(url);
+        //string url = $"https://localhost:7217/api/Weather/{CityName}";
+        //weatherForecast = await Http.GetFromJsonAsync<Root>(url);
+
+        var json = await Http.GetStringAsync(
+            $"https://localhost:7217/api/Weather?city={CityName}");
+
+        weatherForecast = JsonSerializer.Deserialize<WeatherForecast.Root>(json);
     }
 }
