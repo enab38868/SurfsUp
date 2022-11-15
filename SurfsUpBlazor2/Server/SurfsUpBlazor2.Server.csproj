@@ -4,16 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>BlazorSurf.Server-c296c149-4f98-4c36-ab45-ee7fe0153712</UserSecretsId>
+    <UserSecretsId>SurfsUpBlazor2.Server-4456e981-e785-4bec-a3fa-6da2db29c4c9</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\BlazorSurf.Shared.csproj" />
+    <ProjectReference Include="..\Client\SurfsUpBlazor2.Client.csproj" />
+    <ProjectReference Include="..\Shared\SurfsUpBlazor2.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

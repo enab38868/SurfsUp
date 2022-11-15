@@ -28,6 +28,7 @@ builder.Services.AddApiVersioning(options =>
         new HeaderApiVersionReader("X-Version"));
 
 });
+
 builder.Services.AddVersionedApiExplorer(
     options =>
     {
@@ -40,12 +41,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyAllowedOrigins",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7104") 
+            policy.WithOrigins("https://localhost:7104", "https://localhost:7068") // 7104 = mvc, 7068 = Blazor client/server
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
 });
-
 
 var app = builder.Build();
 app.UseCors("MyAllowedOrigins");

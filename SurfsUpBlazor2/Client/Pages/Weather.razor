@@ -1,0 +1,55 @@
+﻿@page "/Weather"
+@using Microsoft.AspNetCore.Authorization;
+@using SurfsUpBlazor.Model
+@using System.Text.Json
+@using static SurfsUpBlazor.Model.WeatherForecast
+@inject HttpClient Http
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<input class="form-text" @bind-value=@CityName />
+<button class="btn btn-primary" @onclick="GetWeatherApiCityName">Knap</button>
+@if (weatherForecast == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @*<th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in weatherForecast.weather)
+            {
+                <tr>
+                    <td>@forecast.description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Root? weatherForecast;
+
+    [Parameter]
+    public string CityName { get; set; }
+
+    public async Task GetWeatherApiCityName()
+    {
+        var json = await Http.GetStringAsync(
+            $"https://localhost:7217/api/Weather?city={CityName}");
+
+        weatherForecast = JsonSerializer.Deserialize<WeatherForecast.Root>(json);
+    }
+}
