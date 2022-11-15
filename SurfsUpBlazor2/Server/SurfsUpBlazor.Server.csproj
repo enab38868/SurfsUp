@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\SurfsUpBlazor2.Client.csproj" />
-    <ProjectReference Include="..\Shared\SurfsUpBlazor2.Shared.csproj" />
+    <ProjectReference Include="..\Client\SurfsUpBlazor.Client.csproj" />
+    <ProjectReference Include="..\Shared\SurfsUpBlazor.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
