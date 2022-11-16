@@ -53,7 +53,7 @@ namespace BlazorSurf.Server.Controllers
                 {
                     try
                     {
-                        Boards board = FindBoard(id);
+                        Board board = FindBoard(id);
                         board.IsRented = true;
                         board.UserID = rent.UserID;
 
@@ -93,4 +93,5 @@ namespace BlazorSurf.Server.Controllers
             }
             return tmpBoard;
         }
+    }
 }

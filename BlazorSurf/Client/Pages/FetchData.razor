@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using BlazorSurf.Shared
+@using System.Text.Json
+@using static BlazorSurf.Shared.WeatherForecast
 @attribute [Authorize]
 @inject HttpClient Http
 
@@ -11,7 +13,10 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+<input class="form-text" @bind-value=@CityName />
+<button class="btn btn-primary" @onclick="GetWeatherApiCityName">Knap</button>
+
+@if (weatherForecast == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,13 +32,10 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in weatherForecast.weather)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@forecast.main</td>
                 </tr>
             }
         </tbody>
@@ -41,17 +43,14 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private Root? weatherForecast;
 
-    protected override async Task OnInitializedAsync()
+    [Parameter]
+    public string CityName { get; set; }
+    public async Task GetWeatherApiCityName()
     {
-        try
-        {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        var json = await Http.GetStringAsync(
+            $"https://localhost:7005/api/Weather?city={CityName}");
+        weatherForecast = JsonSerializer.Deserialize<Root>(json);
     }
 }
