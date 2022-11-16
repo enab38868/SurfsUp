@@ -20,13 +20,13 @@ namespace SurfsUpAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<Board>> GetAllBoards()
         {
-            return _context.Board.OrderBy(a => a.Name).ToList().Where(b => b.Premium == false);
+            return _context.Boards.OrderBy(a => a.Name).ToList().Where(b => b.Premium == false);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetBoard(int id)
         {
-            var boards = await _context.Board.FindAsync(id);
+            var boards = await _context.Boards.FindAsync(id);
 
             if (!BoardExists(id))
             {
@@ -40,7 +40,7 @@ namespace SurfsUpAPI.Controllers
 
             else
             {
-                return Ok(_context.Board.Find(id));
+                return Ok(_context.Boards.Find(id));
             }
         }
 
@@ -94,12 +94,12 @@ namespace SurfsUpAPI.Controllers
 
         private bool BoardExists(int id)
         {
-            return _context.Board.Any(e => e.Id == id);
+            return _context.Boards.Any(e => e.Id == id);
         }
         private Board FindBoard(int id)
         {
             Board tmpBoard = new();
-            foreach (var board in _context.Board)
+            foreach (var board in _context.Boards)
             {
                 if (id == board.Id)
                 {

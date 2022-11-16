@@ -9,8 +9,8 @@ namespace SurfsUpAPI
            : base(options)
         {
         }
-        public DbSet<Board> Board { get; set; } = default!;
+        public DbSet<Board> Boards { get; set; } = default!;
 
-        public DbSet<Rent> Rent { get; set; }
+        public DbSet<Rent> Rents { get; set; }
     }
 }

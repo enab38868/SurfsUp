@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorSurf.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Boards")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class BoardV1Controller : ControllerBase
     {
         private readonly ApplicationDbContext _context;

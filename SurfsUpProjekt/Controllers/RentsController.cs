@@ -158,56 +158,6 @@ namespace SurfsUpProjekt.Controllers
             //response.EnsureSuccessStatusCode(); 
 
             return RedirectToAction(nameof(UserIndex)); 
-
-            #region old
-            //if (!BoardExists(id))
-            //{
-            //    return NotFound();
-            //}
-
-            //int tmpID = id;
-            //var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            //userID = claims.Value;
-            //rent.UserID = userID;
-            //rent.BoardId = id;
-
-            //if (rent.StartRent > rent.EndRent)
-            //{
-            //    ModelState.AddModelError("StartRent", "Start date must be before end date");
-            //}
-            //else
-            //{
-            //    if (rent.UserID != null && rent.BoardId != 0) //TODO vi vil gerne have modelstate.isvalid, men vi kan ikke få det til at fungere
-            //    {
-            //        try
-            //        {
-            //            Board board = FindBoard(id);
-            //            board.IsRented = true;
-            //            board.UserID = userID;
-
-            //            _context.Update(board);
-            //            await _context.SaveChangesAsync();
-
-            //            _context.Add(rent);
-            //            await _context.SaveChangesAsync();
-
-            //            return RedirectToAction(nameof(UserIndex));
-
-            //        }
-            //        catch (SqlException ex)
-            //        {
-            //            ModelState.AddModelError(string.Empty, "Board is already rented bitch");
-            //        }
-            //        catch (DbUpdateException ex)
-            //        {
-            //            ModelState.AddModelError(string.Empty, "Someone was faster than you bitch");
-            //        }
-            //    }
-            //}
-            //return View(rent);
-            #endregion
         }
 
         private bool BoardExists(int id)
@@ -234,6 +184,7 @@ namespace SurfsUpProjekt.Controllers
                 cmd.ExecuteNonQuery();
             }
         }
+
         public static void DeleteUserRentedBoardViaDateTime(int boardId)
         {
             string connectionString = "Server=10.56.8.36;Database=PEDB10;User Id=PE-10;Password=OPENDB_10;Trusted_Connection=False;MultipleActiveResultSets=true";

@@ -26,7 +26,6 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = ApiVersionReader.Combine(
         new QueryStringApiVersionReader("api-version"),
         new HeaderApiVersionReader("X-Version"));
-
 });
 
 builder.Services.AddVersionedApiExplorer(
@@ -56,7 +55,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseHttpsRedirection();
 

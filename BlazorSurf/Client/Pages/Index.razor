@@ -1,9 +1,44 @@
 ﻿@page "/"
+@using BlazorSurf.Shared
+@using System.Text.Json
+@inject HttpClient Http
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (boards == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Width</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var board in boards)
+            {
+                <tr>
+                    <img src="@board.Image" asp-append-version="true" width="300px" />
+                    <td>@board.Name</td>
+                    <td>@board.Width</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private List<Board> boards;
+
+    protected override async Task OnInitializedAsync()
+    {
+        boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
+
+    }
+}

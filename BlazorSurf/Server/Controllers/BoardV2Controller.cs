@@ -9,6 +9,7 @@ namespace BlazorSurf.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("2.0")]
     public class BoardV2Controller : ControllerBase
     {
         private ApplicationDbContext _context;
