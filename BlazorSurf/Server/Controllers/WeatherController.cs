@@ -1,0 +1,23 @@
+﻿using BlazorSurf.Shared;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BlazorSurf.Server.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class WeatherController : ControllerBase
+    {
+        [HttpGet]
+        public async Task<WeatherForecast.Root> WeatherByCity(string city)
+        {
+            HttpClient client = new();
+            string cityname = city;
+            string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
+
+            var result = await client.GetFromJsonAsync<WeatherForecast.Root>(api);
+
+            return result;
+        }
+    }
+}
