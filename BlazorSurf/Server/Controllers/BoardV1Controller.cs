@@ -22,6 +22,10 @@ namespace BlazorSurf.Server.Controllers
         {
             return _context.Boards.OrderBy(a => a.Name).ToList();
         }
+        public async Task<IEnumerable<Rent>> GetAllRents()
+        {
+            return _context.Rents;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetBoard(int id)

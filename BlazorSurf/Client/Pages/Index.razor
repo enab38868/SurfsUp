@@ -3,12 +3,14 @@
 @using System.Text.Json
 @inject HttpClient Http
 
+
 <PageTitle>Index</PageTitle>
 
 @if (boards == null)
 {
     <p><em>Loading...</em></p>
 }
+
 else
 {
     <table class="table">
@@ -17,16 +19,38 @@ else
                 <th>Image</th>
                 <th>Name</th>
                 <th>Width</th>
+                <th>Length</th>
+                <th>Price</th>
+                <th>Volume</th>
+                <th>Thickness</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var board in boards)
             {
                 <tr>
-                    <img src="@board.Image" asp-append-version="true" width="300px" />
+@*                    <img src="@board.Image" asp-append-version="true" width="100px" height="100px" />
                     <td>@board.Name</td>
                     <td>@board.Width</td>
+                    <td>@board.Length</td>
+                    <td>@board.Price</td>
+                    <td>@board.Volume</td>
+                    <td>@board.Thickness</td>*@
+               <div style="width:700px">
+                        <SfGrid DataSource="@board" AllowFiltering="true">
+                        <GridFilterSettings Mode="FilterBarMode.Immediate" ImmediateModeDelay="200">  </GridFilterSettings>
+                            <GridColumns>
+                                 <GridColumn Field=@board.Name HeaderText="Name"></GridColumn>
+                                 <GridColumn Field=@board.Width HeaderText="Width"></GridColumn>
+                                  <GridColumn Field=@board.Length HeaderText="Length"></GridColumn>
+                                  <GridColumn Field=@board.Price HeaderText="Price"></GridColumn>
+                                   <GridColumn Field=@board.Volume HeaderText="Volume"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+              </div>
                 </tr>
+
+
             }
         </tbody>
     </table>
@@ -36,9 +60,21 @@ else
 @code {
     private List<Board> boards;
 
+
+
     protected override async Task OnInitializedAsync()
     {
+
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
 
     }
+
+    //<GridColumn Field=@nameof(board.Name) HeaderText="ID"></GridColumn>
+    //        <GridColumn Field=@nameof(board.Width) HeaderText="First Name"></GridColumn>
+    //        <GridColumn Field=@nameof(board.Length) HeaderText=" Last Name"></GridColumn>
+    //        <GridColumn Field=@nameof(board.Price) HeaderText="Date of Birth"></GridColumn>
+    //        <GridColumn Field=@nameof(board.Volume) HeaderText="Gender"></GridColumn>
+
+
 }
+
