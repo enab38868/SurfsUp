@@ -58,5 +58,6 @@ namespace BlazorSurf.Shared
         [ForeignKey("User")]
         public string? UserID { get; set; }
         public bool Premium { get; set; }
+
     }
 }
