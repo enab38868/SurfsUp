@@ -10,7 +10,7 @@
 
 <h1>Weather forecast</h1>
 
-<input class="form-text" @bind-value=@CityName />
+<input class="form-text" @bind-value=@CityName @onkeydown="Enter" /> @*Only works with @onkeyup. @onkeydown and @onkeypress doesnt work for some reason*@
 <button class="btn btn-primary" @onclick="GetWeatherApiCityName">Knap</button>
 
 
@@ -36,7 +36,7 @@ else
             {
                 <tr>
                     <td>@forecast.dt_txt</td>
-                    <img src="http://openweathermap.org/img/wn/@forecast.weather[i].icon@@2x.png"/>
+                    <img src="http://openweathermap.org/img/wn/@forecast.weather[i].icon@@2x.png" />
                     <td>@forecast.weather[0].description</td>
                     <td>@forecast.main.temp</td>
                     <td>@forecast.wind.speed</td>
@@ -49,14 +49,24 @@ else
 
 @code {
     private Root? weatherForecast;
-    int i = 0;
+    int i = 0; // til vejr ikonet
 
     [Parameter]
     public string CityName { get; set; }
+
     public async Task GetWeatherApiCityName()
     {
         var json = await Http.GetStringAsync(
             $"https://localhost:7005/api/Weather?city={CityName}");
         weatherForecast = JsonSerializer.Deserialize<Root>(json);
+    }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Task.Delay(100); //Added delay because @onkeydown doesnt work without. If changed to @onkeyup it removes the need for the task.delay
+            await GetWeatherApiCityName();
+        }
     }
 }
