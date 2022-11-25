@@ -29,14 +29,16 @@ else
             @foreach (var board in boards)
             {
                 <tr>
-@*                    <img src="@board.Image" asp-append-version="true" width="100px" height="100px" />
+                    <img src="@board.Image" asp-append-version="true" width="100px" height="100px" />
                     <td>@board.Name</td>
                     <td>@board.Width</td>
                     <td>@board.Length</td>
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
-                    <td>@board.Thickness</td>*@
-               <div style="width:700px">
+                    <td>@board.Thickness</td>
+
+
+@*               <div style="width:700px">
                         <SfGrid DataSource="@board" AllowFiltering="true">
                         <GridFilterSettings Mode="FilterBarMode.Immediate" ImmediateModeDelay="200">  </GridFilterSettings>
                             <GridColumns>
@@ -47,7 +49,7 @@ else
                                    <GridColumn Field=@board.Volume HeaderText="Volume"></GridColumn>
                             </GridColumns>
                         </SfGrid>
-              </div>
+              </div>*@
                 </tr>
 
 

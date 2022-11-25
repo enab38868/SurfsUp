@@ -1,20 +1,18 @@
-﻿@page "/fetchdata"
+﻿@page "/weather"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using BlazorSurf.Shared
 @using System.Text.Json
 @using static BlazorSurf.Shared.WeatherForecast
-@attribute [Authorize]
 @inject HttpClient Http
 
 <PageTitle>Weather forecast</PageTitle>
 
 <h1>Weather forecast</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
-
 <input class="form-text" @bind-value=@CityName />
 <button class="btn btn-primary" @onclick="GetWeatherApiCityName">Knap</button>
+
 
 @if (weatherForecast == null)
 {
@@ -25,17 +23,24 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Dato</th>
+                <th> </th>
+                <th>Vejr</th>
+                <th>C°</th>
+                <th>Vindhastighed m/s</th>
+                <th>Luftfugtighed i %</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in weatherForecast.weather)
+            @foreach (var forecast in weatherForecast.list)
             {
                 <tr>
-                    <td>@forecast.main</td>
+                    <td>@forecast.dt_txt</td>
+                    <img src="http://openweathermap.org/img/wn/@forecast.weather[i].icon@@2x.png"/>
+                    <td>@forecast.weather[0].description</td>
+                    <td>@forecast.main.temp</td>
+                    <td>@forecast.wind.speed</td>
+                    <td>@forecast.main.humidity</td>
                 </tr>
             }
         </tbody>
@@ -44,6 +49,7 @@ else
 
 @code {
     private Root? weatherForecast;
+    int i = 0;
 
     [Parameter]
     public string CityName { get; set; }

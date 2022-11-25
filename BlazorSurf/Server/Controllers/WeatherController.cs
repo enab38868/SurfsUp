@@ -12,8 +12,9 @@ namespace BlazorSurf.Server.Controllers
         public async Task<WeatherForecast.Root> WeatherByCity(string city)
         {
             HttpClient client = new();
-            string cityname = city;
-            string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
+            //string cityname = city;
+            //string api = $"https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid=6fffb45ed1b43a7b98671baa1adc21d3";
+            string api = $"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid=6fffb45ed1b43a7b98671baa1adc21d3&units=metric";
 
             var result = await client.GetFromJsonAsync<WeatherForecast.Root>(api);
 
