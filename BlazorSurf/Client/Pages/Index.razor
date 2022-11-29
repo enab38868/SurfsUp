@@ -2,6 +2,7 @@
 @using BlazorSurf.Shared
 @using System.Text.Json
 @inject HttpClient Http
+@inject IModalService modal
 
 
 <PageTitle>Index</PageTitle>
@@ -43,6 +44,7 @@ else
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
+                    <button @onclick="@(()=>modal.Show<Weather>("Details"))" class="btn btn-primary">View</button>
 
                 </tr>
             }
@@ -73,7 +75,6 @@ else
 
         return false;
     }
-
-
+    
 }
 
