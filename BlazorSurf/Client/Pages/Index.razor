@@ -5,6 +5,7 @@
 
 @inject HttpClient Http
 
+
 <PageTitle>Index</PageTitle>
 
 
@@ -43,5 +44,9 @@ else
     {
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
 
+       
+
     }
 }
+
+       
