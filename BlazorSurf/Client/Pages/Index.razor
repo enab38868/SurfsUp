@@ -36,7 +36,7 @@ else
                 if (!IsVisible(board))
                     continue;
                 <tr>
-                    <img src="@board.Image" asp-append-version="true" width="100px" height="100px" />
+                    <img src="@board.Image" asp-append-version="true" width="100" height="100" />
                     <td>@board.Name</td>
                     <td>@board.Width</td>
                     <td>@board.Length</td>
@@ -45,8 +45,6 @@ else
                     <td>@board.Thickness</td>
 
                 </tr>
-
-
             }
         </tbody>
     </table>
@@ -56,13 +54,9 @@ else
 @code {
     private List<Board> boards;
 
-
-
     protected override async Task OnInitializedAsync()
     {
-
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
-
     }
     public string Filter { get; set; }
    
