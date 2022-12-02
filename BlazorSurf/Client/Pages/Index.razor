@@ -23,9 +23,10 @@ else
             <tr>
                 <th Sortable ="true" Filterable="true">Image </th>
                 <th>Name</th>
+                <th>Type</th>
                 <th>Width</th>
                 <th>Length</th>
-                <th>Price</th>
+                <th>Price in DDK</th>
                 <th>Volume</th>
                 <th>Thickness</th>
             </tr>
@@ -36,11 +37,12 @@ else
                 if (!IsVisible(board))
                     continue;
                 <tr>
-                    <img src="@board.Image" asp-append-version="true" width="100" height="100" />
+                    <img src="@board.Image" asp-append-version="true" width="125" height="125" />
                     <td>@board.Name</td>
+                    <td>@board.Type</td>
                     <td>@board.Width</td>
                     <td>@board.Length</td>
-                    <td>@board.Price</td>
+                    <td>@board.Price,-</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
                 </tr>
