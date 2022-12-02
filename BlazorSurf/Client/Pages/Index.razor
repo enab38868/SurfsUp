@@ -43,7 +43,6 @@ else
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
-
                 </tr>
             }
         </tbody>
@@ -53,13 +52,13 @@ else
 
 @code {
     private List<Board> boards;
+    public string Filter { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
     }
-    public string Filter { get; set; }
-   
+
     public bool IsVisible(Board board)
     {
         if (string.IsNullOrEmpty(Filter))
@@ -73,7 +72,5 @@ else
 
         return false;
     }
-
-
 }
 

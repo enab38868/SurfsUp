@@ -40,13 +40,9 @@ namespace BlazorSurf.Server.Controllers
             {
                 return NotFound();
             }
-            int tmpID = id; // IDK what it does
 
-            //var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            //userID = claims.Value;
             rent.BoardId = id;
-            //rent.UserID = userID;
+
 
             if (rent.StartRent > rent.EndRent)
             {

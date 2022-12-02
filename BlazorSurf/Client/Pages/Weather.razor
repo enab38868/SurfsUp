@@ -23,8 +23,8 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Dato</th>
                 <th> </th>
+                <th>Dato</th>
                 <th>Vejr</th>
                 <th>C°</th>
                 <th>Vindhastighed m/s</th>
@@ -35,8 +35,8 @@ else
             @foreach (var forecast in weatherForecast.list)
             {
                 <tr>
-                    <td>@forecast.dt_txt</td>
                     <img src="http://openweathermap.org/img/wn/@forecast.weather[i].icon@@2x.png" />
+                    <td>@forecast.dt_txt</td>
                     <td>@forecast.weather[0].description</td>
                     <td>@forecast.main.temp</td>
                     <td>@forecast.wind.speed</td>

@@ -1,0 +1,30 @@
+﻿@page "/rentout"
+@using BlazorSurf.Shared
+@using System.Text.Json
+@inject HttpClient Http
+
+
+<h4>Rent</h4>
+<hr/>
+<div>
+    Start dato
+    <input class="form-control" @bind="rentObject.StartRent" type="date" />
+
+    Slut dato 
+    <input class="form-control" @bind="rentObject.EndRent" type="date" />
+
+
+</div>
+
+
+
+@code { 
+    private Rent rentObject = new();
+
+    public async Task RentOutBoard(int id)
+    {
+        await Http.PostAsJsonAsync($"https://localhost:7005/api/Boards/Rent/{id}", rentObject);
+    }
+
+}
+  
