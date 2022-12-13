@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfsUpProjekt", "SurfsUpPr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfsUpAPI", "SurfsUpAPI\SurfsUpAPI.csproj", "{3C21A758-11E7-4794-AEBA-BA193022E769}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSurf.Server", "BlazorSurf\Server\BlazorSurf.Server.csproj", "{DE5F43D2-3F9A-4311-9C39-FAC8E1FBEE74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSurf.Server", "BlazorSurf\Server\BlazorSurf.Server.csproj", "{DE5F43D2-3F9A-4311-9C39-FAC8E1FBEE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSurf.Client", "BlazorSurf\Client\BlazorSurf.Client.csproj", "{DBF2060F-B50B-43BA-A401-CF9D2CDCEFA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSurf.Client", "BlazorSurf\Client\BlazorSurf.Client.csproj", "{DBF2060F-B50B-43BA-A401-CF9D2CDCEFA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSurf.Shared", "BlazorSurf\Shared\BlazorSurf.Shared.csproj", "{95C5F61E-BFB1-4785-8C02-DEF18F66BF42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSurf.Shared", "BlazorSurf\Shared\BlazorSurf.Shared.csproj", "{95C5F61E-BFB1-4785-8C02-DEF18F66BF42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

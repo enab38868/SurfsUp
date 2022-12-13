@@ -1,0 +1,31 @@
+﻿@page "/BP"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using static BlazorSurf.Shared.Board
+@using System.Text.Json
+@inject HttpClient Http
+    
+
+<h3>Board</h3>
+
+
+@code {
+
+    Items items;
+
+    public class Items
+    {
+        public string Tester1 { get; set; }
+        public string Tester2 { get; set; }
+    }
+
+    protected override void OnInitialized()
+    {
+
+            this.items = new Items()
+            {
+                Tester2 = "test2",
+                Tester1= "test1",
+            };
+    }
+}

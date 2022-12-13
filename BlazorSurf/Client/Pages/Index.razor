@@ -44,6 +44,7 @@ else
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
+                    <button @onclick="@(()=>modal.Show<BoardPage>(board.Name))" class="btn btn-primary">View</button>
                 </tr>
             }
         </tbody>
@@ -75,4 +76,3 @@ else
     }
     
 }
-
