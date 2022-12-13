@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using BlazorSurf.Server.Hubs;
-using BlazorSurf.Server.Models;
+using BlazorSurf.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +29,7 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddSignalR();
+
 builder.Services.AddResponseCompression(opts =>
 {
     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -73,9 +74,7 @@ else
     app.UseHsts();
 }
 
-app.UseIdentityServer();
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
@@ -83,9 +82,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseIdentityServer();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorPages();
 app.MapControllers();
-app.MapHub<ChatHub>("/chathub");
 app.MapFallbackToFile("index.html");
-
+app.MapHub<SignalRHub>("/signalRHub");
 app.Run();
