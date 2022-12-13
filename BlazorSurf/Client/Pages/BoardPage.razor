@@ -1,31 +1,45 @@
-﻿@page "/BP"
+﻿@*@page "/BP"*@
+@using BlazorSurf.Shared
+@using Blazored.Modal;
+@using Blazored.Modal.Services;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using static BlazorSurf.Shared.Board
-@using System.Text.Json
-@inject HttpClient Http
-    
 
-<h3>Board</h3>
 
+@*<BoardPage @bind-SelectedBoard="board" />*@
+@*<TwoWayBinding @bind-value="SelectedBoard"/>*@
+
+@*@if (Name == null && 1 != 1) // delete
+{
+    <p><em>No data</em></p>
+}
+else
+{*@
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>:(</td>
+                    <td>@SelectedItem.Name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@*}*@
+
+ pog?
 
 @code {
-
-    Items items;
-
-    public class Items
-    {
-        public string Tester1 { get; set; }
-        public string Tester2 { get; set; }
-    }
+    [Parameter] public Board? SelectedItem { get; set; }
 
     protected override void OnInitialized()
     {
 
-            this.items = new Items()
-            {
-                Tester2 = "test2",
-                Tester1= "test1",
-            };
     }
+
 }

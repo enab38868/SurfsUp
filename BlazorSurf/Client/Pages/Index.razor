@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using BlazorSurf.Shared
 @using System.Text.Json
+@using Blazored.Modal.Services;
+@using Blazored.Modal;
 @inject HttpClient Http
 @inject IModalService modal
 
@@ -44,7 +46,10 @@ else
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
-                    <button @onclick="@(()=>modal.Show<BoardPage>(board.Name))" class="btn btn-primary">View</button>
+                    @*<button @onclick="@(()=>modal.Show<BoardPage>($"Details for {board.Name}"))" class="btn btn-primary">View</button>*@
+                    <BoardPage SelectedItem="@board"/> @*https://www.pragimtech.com/blog/blazor/blazor-component-parameters/*@
+                    <button @onclick="@(() => GetAndShow(board))" class="btn btn-primary">View</button>
+                    
                 </tr>
             }
         </tbody>
@@ -54,13 +59,32 @@ else
 
 @code {
     private List<Board> boards;
+    public string Filter { get; set; }
+
+    [Parameter] public Board? SelectedBoard { get; set; }
+    [Parameter] public EventCallback<Board> SelectedBoardChanged { get; set; }
+    private async Task ChangeSelectedBoardAsync()
+    {
+        await SelectedBoardChanged.InvokeAsync(SelectedBoard);
+    }
+
+
+    public Board GetSelectedBoard()
+    {
+        return SelectedBoard;
+    }
+    void GetAndShow(Board board)
+    {
+        //<BoardPage SelectedItem="@board"/>   <-- det skulle gerne ske her i virkeligheden
+        SelectedBoard = board;
+        modal.Show<BoardPage>($"Details for {board.Name}");
+    }
 
     protected override async Task OnInitializedAsync()
     {
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
     }
-    public string Filter { get; set; }
-   
+
     public bool IsVisible(Board board)
     {
         if (string.IsNullOrEmpty(Filter))
