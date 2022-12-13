@@ -41,10 +41,12 @@ builder.Services.AddApiVersioning(options =>
 
 var app = builder.Build();
 
+//TODO DELETE? 
 using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
 {
     var services = scope.ServiceProvider;
 }
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
 {
