@@ -99,6 +99,18 @@ namespace BlazorSurf.Server.Controllers
             return tmpBoard;
         }
 
+        [HttpPost, Route("Create")] 
+        public async Task<IActionResult> Create([FromBody] Board board)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(board);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+                return BadRequest();
+        }
 
     }
 }
