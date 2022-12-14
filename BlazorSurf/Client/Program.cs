@@ -13,6 +13,8 @@ builder.Services.AddHttpClient("BlazorSurf.ServerAPI", client => client.BaseAddr
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorSurf.ServerAPI"));
 
+
 builder.Services.AddApiAuthorization();
 
 await builder.Build().RunAsync();
+

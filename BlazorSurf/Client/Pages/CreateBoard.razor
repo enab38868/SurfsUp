@@ -1,0 +1,83 @@
+﻿@page "/createBoard"
+@using BlazorSurf.Shared
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+@*@{
+    ViewData["Title"] = "Create";
+}
+*@
+<h1>Create</h1>
+
+<h4>Board</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                Namex 
+                <input asp-for="Name" class="form-control" @bind="board.Name"/>
+
+            </div>
+            <div class="form-group">
+                Length
+                <input asp-for="Length" class="form-control" @bind="board.Length" />
+            </div>
+            <div class="form-group">
+                Width
+                <input asp-for="Width" class="form-control" @bind="board.Width" />
+            </div>
+            <div class="form-group">
+                Thickness
+                <input asp-for="Thickness" class="form-control" @bind="board.Thickness"/>
+            </div>
+            <div class="form-group">
+                Volume
+                <input asp-for="Volume" class="form-control" @bind="board.Volume" />
+            </div>
+            <div class="form-group">
+                Type
+                <input asp-for="Type" class="form-control" @bind="board.Type" />
+            </div>
+            <div class="form-group">
+                Price
+                <input asp-for="Price" class="form-control" @bind="board.Price" />
+            </div>
+            <div class="form-group">
+                Equipment
+                <input asp-for="Equipment" class="form-control" @bind="board.Equipment" />
+            </div>
+            <div class="form-group">
+                Image
+                <input asp-for="Image" class="form-control" @bind="board.Image" />
+            </div>
+
+            <div class="form-group">
+                <br>
+                <input type="submit" @onclick="CreateBoards" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@*@section Scripts {
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}*@
+@code{
+    Board board = new();
+
+
+    public async Task CreateBoards()
+    {
+       
+        board.Premium = false;
+        var json = await Http.PostAsJsonAsync<Board>("api/BoardV2/Create", board);
+       
+        
+    }
+}
+
+

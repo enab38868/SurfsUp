@@ -98,5 +98,7 @@ namespace BlazorSurf.Server.Controllers
             }
             return tmpBoard;
         }
+
+
     }
 }
