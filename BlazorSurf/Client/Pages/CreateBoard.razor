@@ -73,11 +73,11 @@
     public async Task CreateBoards()
     {     
         board.Premium = false;
-        //var json = await Http.PostAsJsonAsync<Board>("api/Boards/Create", board);
+        var json = await Http.PostAsJsonAsync<Board>("api/Boards/Create", board);
 
-        string url = "https://localhost:7005/api/Boards/Create";
-        using var client = new HttpClient();
+        //string url = "https://localhost:7005/api/Boards/Create";
+        //using var client = new HttpClient();
         
-        var response = await client.PostAsJsonAsync(url, board);
+        //var response = await client.PostAsJsonAsync(url, board);
     }
 }
