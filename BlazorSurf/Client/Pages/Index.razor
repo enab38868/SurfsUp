@@ -88,16 +88,7 @@ else
 
     public bool IsVisible(Board board)
     {
-        if (string.IsNullOrEmpty(Filter))
-            return true;
-
-        if (board.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        if (board.Price.ToString().StartsWith(Filter) || board.Price.ToString().StartsWith(Filter))
-            return true;
-
-        return false;
+        return string.IsNullOrEmpty(Filter) || board.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase) || board.Price.ToString().StartsWith(Filter);
     }
 
 }
