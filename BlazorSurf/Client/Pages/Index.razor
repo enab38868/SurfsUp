@@ -49,14 +49,11 @@ else
                     <td>@board.Price</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
-                    @*<button @onclick="@(()=>modal.Show<BoardPage>($"Details for {board.Name}"))" class="btn btn-primary">View</button>*@
-                    @* <BoardPage SelectedItem="@board"/>*@ @*https://www.pragimtech.com/blog/blazor/blazor-component-parameters/*@
-                    @*<button @onclick="@(() => GetAndShow(board))" class="btn btn-primary">View</button>*@
                     <button @onclick="@(() => ShowBoardModal(board))" class="btn btn-primary">View</button>
                 </tr>
                 @if (showModal)
                 {
-                    <BoardPage SelectedItem="configureBoard"/>
+                    <BoardPage SelectedItem="configureBoard" OnClose="OnBoardPageDialogClose" />
                 }
             }
         </tbody>
@@ -69,6 +66,7 @@ else
     public string Filter { get; set; }
     Board configureBoard = new();
     bool showModal;
+    public bool BoardPageDialogOpen { get; set; }
 
     void ShowBoardModal(Board board)
     {
@@ -76,10 +74,11 @@ else
         showModal = true;
     }
 
-    //void GetAndShow(Board board)
-    //{
-    //    modal.Show<BoardPage>($"Details for {board.Name}");
-    //}
+    private async Task OnBoardPageDialogClose(bool accepted)
+    {
+        BoardPageDialogOpen = false;
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {
