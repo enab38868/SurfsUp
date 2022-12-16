@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using BlazorSurf.Client.Components;
 @using BlazorSurf.Shared
 @using System.Text.Json
 @using Blazored.Modal.Services;
@@ -16,6 +17,8 @@
 @*https://timheuer.com/blog/filtering-data-table-with-blazor/*@
 else
 {
+
+
     <div class="form-group">
         <input class="form-control" type="text" placeholder="Search...(Name/Price)"
            @bind="Filter"
@@ -24,7 +27,7 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th Sortable ="true" Filterable="true">Image </th>
+                <th Sortable="true" Filterable="true">Image </th>
                 <th>Name</th>
                 <th>Width</th>
                 <th>Length</th>
@@ -47,10 +50,14 @@ else
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
                     @*<button @onclick="@(()=>modal.Show<BoardPage>($"Details for {board.Name}"))" class="btn btn-primary">View</button>*@
-                    <BoardPage SelectedItem="@board"/> @*https://www.pragimtech.com/blog/blazor/blazor-component-parameters/*@
-                    <button @onclick="@(() => GetAndShow(board))" class="btn btn-primary">View</button>
-                    
+                    @* <BoardPage SelectedItem="@board"/>*@ @*https://www.pragimtech.com/blog/blazor/blazor-component-parameters/*@
+                    @*<button @onclick="@(() => GetAndShow(board))" class="btn btn-primary">View</button>*@
+                    <button @onclick="@(() => ShowBoardModal(board))" class="btn btn-primary">View</button>
                 </tr>
+                @if (showModal)
+                {
+                    <BoardPage SelectedItem="configureBoard"/>
+                }
             }
         </tbody>
     </table>
@@ -60,25 +67,19 @@ else
 @code {
     private List<Board> boards;
     public string Filter { get; set; }
+    Board configureBoard = new();
+    bool showModal;
 
-    [Parameter] public Board? SelectedBoard { get; set; }
-    [Parameter] public EventCallback<Board> SelectedBoardChanged { get; set; }
-    private async Task ChangeSelectedBoardAsync()
+    void ShowBoardModal(Board board)
     {
-        await SelectedBoardChanged.InvokeAsync(SelectedBoard);
+        configureBoard = board;
+        showModal = true;
     }
 
-
-    public Board GetSelectedBoard()
-    {
-        return SelectedBoard;
-    }
-    void GetAndShow(Board board)
-    {
-        //<BoardPage SelectedItem="@board"/>   <-- det skulle gerne ske her i virkeligheden
-        SelectedBoard = board;
-        modal.Show<BoardPage>($"Details for {board.Name}");
-    }
+    //void GetAndShow(Board board)
+    //{
+    //    modal.Show<BoardPage>($"Details for {board.Name}");
+    //}
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,5 +99,5 @@ else
 
         return false;
     }
-    
+
 }
