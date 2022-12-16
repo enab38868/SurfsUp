@@ -1,5 +1,4 @@
-﻿@page "/"
-@page "/home"
+﻿@page "/Boards"
 @using BlazorSurf.Shared
 @using System.Text.Json
 
@@ -44,9 +43,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         boards = await Http.GetFromJsonAsync<List<Board>>("api/Boards/GetAllBoards?version=1.0");
-
-       
-
     }
 }
 
