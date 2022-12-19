@@ -1,7 +1,11 @@
 ﻿@page "/"
+@using BlazorSurf.Client.Components;
 @using BlazorSurf.Shared
 @using System.Text.Json
+@using Blazored.Modal.Services;
+@using Blazored.Modal;
 @inject HttpClient Http
+@inject IModalService modal
 
 
 <PageTitle>Index</PageTitle>
@@ -13,6 +17,8 @@
 @*https://timheuer.com/blog/filtering-data-table-with-blazor/*@
 else
 {
+
+
     <div class="form-group">
         <input class="form-control" type="text" placeholder="Search...(Name/Price)"
            @bind="Filter"
@@ -21,7 +27,7 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th Sortable ="true" Filterable="true">Image </th>
+                <th Sortable="true" Filterable="true">Image </th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Width</th>
@@ -45,7 +51,12 @@ else
                     <td>@board.Price,-</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
+                    <button @onclick="@(() => ShowBoardModal(board))" class="btn btn-primary">View</button>
                 </tr>
+                @if (showModal)
+                {
+                    <BoardPage SelectedItem="configureBoard" OnClose="OnBoardPageDialogClose" />
+                }
             }
         </tbody>
     </table>
@@ -55,6 +66,21 @@ else
 @code {
     private List<Board> boards;
     public string Filter { get; set; }
+    Board configureBoard = new();
+    bool showModal;
+    public bool BoardPageDialogOpen { get; set; }
+
+    void ShowBoardModal(Board board)
+    {
+        configureBoard = board;
+        showModal = true;
+    }
+
+    private async Task OnBoardPageDialogClose(bool accepted)
+    {
+        BoardPageDialogOpen = false;
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,16 +89,8 @@ else
 
     public bool IsVisible(Board board)
     {
-        if (string.IsNullOrEmpty(Filter))
-            return true;
-
-        if (board.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        if (board.Price.ToString().StartsWith(Filter) || board.Price.ToString().StartsWith(Filter))
-            return true;
-
-        return false;
+        return string.IsNullOrEmpty(Filter) || board.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase) || board.Price.ToString().StartsWith(Filter);
     }
-}
 
+
+}
