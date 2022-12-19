@@ -1,5 +1,4 @@
-﻿using BlazorSurf.Server.Models;
-using Duende.IdentityServer.EntityFramework.Options;
+﻿using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -17,5 +16,21 @@ namespace BlazorSurf.Server.Data
         public DbSet<Board> Boards => Set<Board>();
 
         public DbSet<Rent> Rents => Set<Rent>();
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ChatMessage>(entity =>
+            {
+                entity.HasOne(d => d.FromUser)
+                    .WithMany(p => p.ChatMessagesFromUsers)
+                    .HasForeignKey(d => d.FromUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(d => d.ToUser)
+                    .WithMany(p => p.ChatMessagesToUsers)
+                    .HasForeignKey(d => d.ToUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+        }
     }
 }

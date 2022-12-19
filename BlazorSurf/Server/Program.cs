@@ -1,10 +1,11 @@
-using BlazorSurf.Server.Data;
-using BlazorSurf.Server.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
+using BlazorSurf.Server.Hubs;
+using BlazorSurf.Shared;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BlazorSurf.Client;
+using BlazorSurf.Server.Data;
 using BlazorSurf.Server;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,29 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
-
 builder.Services.AddControllersWithViews();
+
+
+
+builder.Services.AddSignalR();
+
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
+});
+
 builder.Services.AddRazorPages();
+//builder.Services.AddServerSideBlazor();
+//builder.Services.AddResponseCompression(opts =>
+//{
+//    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+//        new[] { "application/octet-stream" });
+//});
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -46,9 +61,9 @@ using (var scope = app.Services.CreateScope()) //  ----- SEED DATABASE -----
 {
     var services = scope.ServiceProvider;
 }
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+app.UseResponseCompression();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
@@ -60,8 +75,9 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 
+
+app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
@@ -74,5 +90,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
-
+app.MapHub<SignalRHub>("/signalRHub");
 app.Run();

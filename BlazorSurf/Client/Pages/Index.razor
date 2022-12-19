@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@page "/Boards"
+@page "/"
 @using BlazorSurf.Client.Components;
 @using BlazorSurf.Shared
 @using System.Text.Json
@@ -9,6 +10,7 @@
 
 
 <PageTitle>Index</PageTitle>
+
 
 @if (boards == null)
 {
@@ -91,6 +93,4 @@ else
     {
         return string.IsNullOrEmpty(Filter) || board.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase) || board.Price.ToString().StartsWith(Filter);
     }
-
-
 }
