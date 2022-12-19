@@ -8,6 +8,7 @@ using SurfsUpAPI.Model;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
+using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace SurfsUpAPI.Controllers
 {
@@ -99,6 +100,32 @@ namespace SurfsUpAPI.Controllers
                 }
             }
             return tmpBoard;
+        }
+
+
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(string Name, double Length, double Width, double Thickness, double Volume, string Type, double Price, string Equipment, string Image, bool Premium, Board board)
+        {
+            board.Name = Name;
+            board.Length = Length;
+            board.Width = Width;
+            board.Thickness = Thickness;
+            board.Volume = Volume;
+            board.Type = Type;
+            board.Price = Price;
+            board.Equipment = Equipment;
+            board.Image = Image;
+            board.Premium = Premium;
+
+            if (ModelState.IsValid)
+            {
+
+                _context.Add(board);
+                await _context.SaveChangesAsync();
+                return Ok("perfecto");
+            }
+            else
+                return BadRequest();
         }
     }
 }

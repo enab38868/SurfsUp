@@ -39,7 +39,7 @@ namespace BlazorSurf.Shared
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double Volume { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
+        //[RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
         [StringLength(30)]
         [Required]
         public string Type { get; set; }
