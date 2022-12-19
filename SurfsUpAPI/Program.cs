@@ -40,7 +40,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyAllowedOrigins",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7104", "https://localhost:7068") // 7104 = mvc, 7068 = Blazor client/server
+            policy.WithOrigins("https://localhost:7104", "https://localhost:7068", "https://localhost:7211", "https://localhost:7217") // 7104 = mvc, 7068 = Blazor client/server
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
