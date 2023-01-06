@@ -17,7 +17,7 @@ namespace SurfsUpAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet, Route("GetAllBoards")]
         public async Task<IEnumerable<Board>> GetAllBoards()
         {
             return _context.Boards.OrderBy(a => a.Name).ToList().Where(b => b.Premium == false);
