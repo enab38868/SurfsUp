@@ -4,28 +4,12 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-@*<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>:(</td>
-                <td>@SelectedItem.Name</td>
-            </tr>
-        </tbody>
-    </table>
-</div>*@
-
-<div class="modal fade show" id="myModal" style="display:block;"  aria-modal="true" role="dialog">
-    <div class="modal-dialog">
+<div class="modal" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" >
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">@SelectedItem.Name</h4>
-                <button type="button" class="close" data-dismiss="modal fade show" @onclick=ModalCancel>&times;</button>
+                <button type="button" class="close" data-dismiss="modal"  @onclick=ModalCancel>&times;</button>
             </div>
             <div class="modal-body">
                 <p>Name: @SelectedItem.Name</p>
@@ -47,52 +31,20 @@
     </div>
 </div>
 
-
-@*@if (ShowBackdrop)
-{
-    <div class="modal-backdrop fade show"></div>
-}*@
-
-
-
 @code {
     [Parameter] 
     public Board? SelectedItem { get; set; }
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }       
-    private Rent rentObject = new(); // IDK
+    private Rent rentObject = new(); 
+
+
     private Task ModalCancel()
-    {     
+    {
         return OnClose.InvokeAsync(false);
     }
     private Task ModalOk()
     {       
         return OnClose.InvokeAsync(true);
     }
-
-    //public Guid Guid = Guid.NewGuid();
-    //public string ModalDisplay = "none;";
-    //public string ModalClass = "";
-    //public bool ShowBackdrop = false;
-
-    //public void Open()
-    //{
-    //    ModalDisplay = "block;";
-    //    ModalClass = "Show";
-    //    ShowBackdrop = true;
-    //    StateHasChanged();
-    //}
-
-    //public void Close()
-    //{
-    //    ModalDisplay = "none";
-    //    ModalClass = "";
-    //    ShowBackdrop = false;
-    //    StateHasChanged();
-    //}
-
-    protected override void OnInitialized()
-    {
-    }
-
 }

@@ -18,8 +18,6 @@
 @*https://timheuer.com/blog/filtering-data-table-with-blazor/*@
 else
 {
-
-
     <div class="form-group">
         <input class="form-control" type="text" placeholder="Search...(Name/Price)"
            @bind="Filter"
@@ -33,7 +31,7 @@ else
                 <th>Type</th>
                 <th>Width</th>
                 <th>Length</th>
-                <th>Price in DDK</th>
+                <th>Price in DKK</th>
                 <th>Volume</th>
                 <th>Thickness</th>
             </tr>
@@ -52,24 +50,23 @@ else
                     <td>@board.Price,-</td>
                     <td>@board.Volume</td>
                     <td>@board.Thickness</td>
-                    <button @onclick="@(() => ShowBoardModal(board))" class="btn btn-primary">View</button>
+                    <button @onclick="@(() => ShowBoardModal(board))" type="button" class="btn btn-primary">View</button>
                 </tr>
                 @if (showModal)
                 {
-                    <BoardPage SelectedItem="configureBoard" OnClose="OnBoardPageDialogClose" />
+                    <BoardPage SelectedItem="configureBoard"  />
                 }
             }
         </tbody>
     </table>
 }
-
+@*OnClose="OnBoardPageDialogClose"*@
 
 @code {
     private List<Board> boards;
     public string Filter { get; set; }
     Board configureBoard = new();
     bool showModal;
-    public bool BoardPageDialogOpen { get; set; }
 
     void ShowBoardModal(Board board)
     {
@@ -77,11 +74,11 @@ else
         showModal = true;
     }
 
-    private async Task OnBoardPageDialogClose(bool accepted)
-    {
-        BoardPageDialogOpen = false;
-        StateHasChanged();
-    }
+    //private async Task OnBoardPageDialogClose(bool accepted)
+    //{
+    //    showModal = false;
+    //    StateHasChanged();
+    //}
 
     protected override async Task OnInitializedAsync()
     {
