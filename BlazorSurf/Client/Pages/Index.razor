@@ -54,13 +54,12 @@ else
                 </tr>
                 @if (showModal)
                 {
-                    <BoardPage SelectedItem="configureBoard"  />
+                    <BoardPage SelectedItem="configureBoard" OnClose="CloseEvent" />
                 }
             }
         </tbody>
     </table>
 }
-@*OnClose="OnBoardPageDialogClose"*@
 
 @code {
     private List<Board> boards;
@@ -74,11 +73,10 @@ else
         showModal = true;
     }
 
-    //private async Task OnBoardPageDialogClose(bool accepted)
-    //{
-    //    showModal = false;
-    //    StateHasChanged();
-    //}
+    private void CloseEvent(MouseEventArgs e)
+    {
+        showModal = false;
+    }
 
     protected override async Task OnInitializedAsync()
     {

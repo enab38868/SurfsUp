@@ -9,7 +9,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">@SelectedItem.Name</h4>
-                <button type="button" class="close" data-dismiss="modal"  @onclick=ModalCancel>&times;</button>
+                <button type="button" class="close" data-dismiss="modal" @onclick=OnClose>&times;</button>
             </div>
             <div class="modal-body">
                 <p>Name: @SelectedItem.Name</p>
@@ -25,7 +25,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick=@ModalOk > OK </button>
+                <button type="button" class="btn btn-primary" @onclick=@OnClose> OK </button>
             </div>
         </div>
     </div>
@@ -35,16 +35,6 @@
     [Parameter] 
     public Board? SelectedItem { get; set; }
     [Parameter]
-    public EventCallback<bool> OnClose { get; set; }       
+    public EventCallback<MouseEventArgs> OnClose { get; set; }       
     private Rent rentObject = new(); 
-
-
-    private Task ModalCancel()
-    {
-        return OnClose.InvokeAsync(false);
-    }
-    private Task ModalOk()
-    {       
-        return OnClose.InvokeAsync(true);
-    }
 }
